@@ -15,6 +15,9 @@ Solar Savings Assessment | Mark Fitzpatrick
 <link rel="stylesheet" href="style.css">
 
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
 </head>
 
 
@@ -22,7 +25,6 @@ Solar Savings Assessment | Mark Fitzpatrick
 
 
 <header class="hero">
-
 
 <div class="container">
 
@@ -33,18 +35,22 @@ Solar Savings Assessment
 
 
 <h2>
-Find out how much you could save with solar and battery storage
+Discover your potential solar savings
 </h2>
 
 
 <p>
-Prepared by Mark Fitzpatrick<br>
+Prepared by
+<br>
+<strong>
+Mark Fitzpatrick
+</strong>
+<br>
 Renewable Energy Specialist
 </p>
 
 
 </div>
-
 
 </header>
 
@@ -52,15 +58,21 @@ Renewable Energy Specialist
 
 
 
-<section class="container">
+<main class="container">
+
+
+
+
+
+<section class="card">
 
 
 <h2>
-Step 1 - Select Your Property Type
+1. Property Type
 </h2>
 
 
-<div class="options">
+<div class="button-grid">
 
 
 <button onclick="selectProperty('Residential')">
@@ -86,6 +98,9 @@ Step 1 - Select Your Property Type
 </div>
 
 
+<input type="hidden" id="propertyType">
+
+
 </section>
 
 
@@ -95,50 +110,72 @@ Step 1 - Select Your Property Type
 
 
 
-<section class="container">
+
+<section class="card">
 
 
 <h2>
-Step 2 - Your Electricity Usage
+2. Energy Usage
 </h2>
 
 
-
 <label>
-Approximate electricity bill
+Average electricity bill
 </label>
 
 
-<select id="billAmount">
+<select id="energyBill">
 
 
 <option value="">
-Select your average bill
+Select approximate bill
 </option>
 
 
 <option value="200">
-$200 per month
+$200/month
 </option>
 
 
 <option value="400">
-$400 per month
+$400/month
 </option>
 
 
 <option value="600">
-$600 per month
+$600/month
 </option>
 
 
 <option value="800">
-$800 per month
+$800/month
 </option>
 
 
 <option value="1200">
-$1200+ per month
+$1200+/month
+</option>
+
+
+</select>
+
+
+
+<label>
+Billing period
+</label>
+
+
+<select id="billingPeriod">
+
+
+<option value="monthly">
+Monthly
+</option>
+
+
+<option value="quarterly">
+Quarterly
 </option>
 
 
@@ -156,41 +193,73 @@ $1200+ per month
 
 
 
-<section class="container">
+<section class="card">
 
 
 <h2>
-Step 3 - Energy Requirements
+3. Energy Requirements
 </h2>
 
 
 
+<div class="checkbox-grid">
+
+
 <label>
-Do you have high energy usage?
+<input 
+type="checkbox"
+id="aircon">
+
+Air Conditioning
+
 </label>
 
 
-<div class="options">
+
+<label>
+<input 
+type="checkbox"
+id="ev">
+
+Electric Vehicle
+
+</label>
 
 
-<button onclick="toggleEnergy('aircon')">
-❄️ Air Conditioning
-</button>
 
 
-<button onclick="toggleEnergy('ev')">
-🚗 Electric Vehicle
-</button>
+<label>
+<input 
+type="checkbox"
+id="pool">
+
+Pool
+
+</label>
 
 
-<button onclick="toggleEnergy('pool')">
-🏊 Pool
-</button>
 
 
-<button onclick="toggleEnergy('pump')">
-💧 Pumps / Irrigation
-</button>
+<label>
+<input 
+type="checkbox"
+id="pump">
+
+Pumps / Irrigation
+
+</label>
+
+
+
+<label>
+<input 
+type="checkbox"
+id="machinery">
+
+Machinery / Equipment
+
+</label>
+
 
 
 </div>
@@ -206,40 +275,41 @@ Do you have high energy usage?
 
 
 
-<section class="container">
+<section class="card">
 
 
 <h2>
-Step 4 - Battery Storage
+4. Battery Preference
 </h2>
 
 
+<select id="batteryPreference">
 
-<select id="batteryChoice">
 
-
-<option value="No Battery">
+<option value="none">
 No Battery
 </option>
 
 
-<option value="Small Battery">
-Small Battery (5-10kWh)
+<option value="small">
+Small Battery
+(5-10kWh)
 </option>
 
 
-<option value="Medium Battery">
-Medium Battery (10-15kWh)
+<option value="medium">
+Medium Battery
+(10-20kWh)
 </option>
 
 
-<option value="Large Battery">
-Large Battery (15-30kWh)
+<option value="large">
+Large Battery
+(20kWh+)
 </option>
 
 
 </select>
-
 
 
 </section>
@@ -252,10 +322,11 @@ Large Battery (15-30kWh)
 
 
 
-<section class="container">
+<section class="center">
 
 
-<button class="primary"
+<button 
+class="primary"
 onclick="calculateSolar()">
 
 Calculate My Solar Savings
@@ -263,7 +334,6 @@ Calculate My Solar Savings
 </button>
 
 
-
 </section>
 
 
@@ -274,7 +344,9 @@ Calculate My Solar Savings
 
 
 
-<section class="container results">
+<section 
+id="resultsSection"
+class="card hidden">
 
 
 <h2>
@@ -283,13 +355,71 @@ Your Solar Recommendation
 
 
 
-<div id="results">
+<div class="results-grid">
 
 
-Complete the assessment above to see your recommendation.
+<div>
+<h3>
+Solar System
+</h3>
+
+<p id="solarResult">
+-
+</p>
+
+</div>
+
+
+
+<div>
+
+<h3>
+Battery
+
+</h3>
+
+<p id="batteryResult">
+-
+</p>
+
+</div>
+
+
+
+
+<div>
+
+<h3>
+Annual Savings
+
+</h3>
+
+<p id="savingsResult">
+-
+</p>
+
+</div>
+
+
+
+
+<div>
+
+<h3>
+Payback
+
+</h3>
+
+<p id="paybackResult">
+-
+</p>
+
+</div>
 
 
 </div>
+
+
 
 
 
@@ -303,7 +433,44 @@ Complete the assessment above to see your recommendation.
 
 
 
-<section class="container">
+<section 
+id="chartsSection"
+class="card hidden">
+
+
+<h2>
+Energy Savings Analysis
+</h2>
+
+
+
+<canvas id="costChart"></canvas>
+
+
+<br><br>
+
+
+<canvas id="savingsChart"></canvas>
+
+
+<br><br>
+
+
+<canvas id="energyChart"></canvas>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="card">
 
 
 <h2>
@@ -312,28 +479,24 @@ Receive Your Personal Solar Report
 
 
 <p>
-Enter your details to receive your assessment report.
+Enter your details and receive your assessment.
 </p>
 
 
 
-
-<input
-type="text"
+<input 
 id="leadName"
 placeholder="Your Name">
 
 
 
-<input
-type="tel"
+<input 
 id="leadMobile"
 placeholder="Mobile Number">
 
 
 
-<input
-type="email"
+<input 
 id="leadEmail"
 placeholder="Email Address">
 
@@ -341,8 +504,8 @@ placeholder="Email Address">
 
 
 
-
-<button class="primary"
+<button
+class="primary"
 onclick="captureLead()">
 
 Send My Solar Report
@@ -350,7 +513,6 @@ Send My Solar Report
 </button>
 
 
-
 </section>
 
 
@@ -359,23 +521,7 @@ Send My Solar Report
 
 
 
-
-
-<section class="container">
-
-
-<canvas id="savingsChart"></canvas>
-
-
-<canvas id="projectionChart"></canvas>
-
-
-<canvas id="energyChart"></canvas>
-
-
-</section>
-
-
+</main>
 
 
 
@@ -388,13 +534,23 @@ Send My Solar Report
 
 <p>
 
-Mark Fitzpatrick<br>
+Mark Fitzpatrick
 
-Renewable Energy Specialist<br>
+<br>
 
-M: 0434 151 237<br>
+Renewable Energy Specialist
+
+<br>
+
+M: 0434 151 237
+
+<br>
 
 mark.fitzpatrick@classaenergy.com.au
+
+<br>
+
+ABN: 40 893 359 837
 
 </p>
 
@@ -411,21 +567,15 @@ mark.fitzpatrick@classaenergy.com.au
 
 <script src="config.js"></script>
 
-
 <script src="calculator.js"></script>
-
 
 <script src="charts.js"></script>
 
-
 <script src="lead-form.js"></script>
-
 
 <script src="pdf-generator.js"></script>
 
 
-
 </body>
-
 
 </html>
