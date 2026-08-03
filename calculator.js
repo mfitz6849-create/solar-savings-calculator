@@ -1,7 +1,7 @@
 /*
 ==================================================
 Solar Savings Assessment
-Calculator Engine
+Calculation Engine
 
 Prepared by:
 Mark Fitzpatrick
@@ -47,7 +47,7 @@ function calculateSolar(){
 
 
 
-const bill =
+const billValue =
 
 Number(
 document.getElementById(
@@ -57,7 +57,7 @@ document.getElementById(
 
 
 
-const period =
+const billingPeriod =
 
 document.getElementById(
 "billingPeriod"
@@ -65,8 +65,27 @@ document.getElementById(
 
 
 
+const postcode =
 
-if(!bill){
+document.getElementById(
+"postcode"
+)?.value || "";
+
+
+
+const ownership =
+
+document.getElementById(
+"ownership"
+)?.value || "";
+
+
+
+
+
+
+
+if(!billValue){
 
 
 alert(
@@ -84,14 +103,26 @@ return;
 
 
 
+
+
+/*
+----------------------------------
+Convert to annual bill
+----------------------------------
+*/
+
+
 let annualBill;
 
 
 
-if(period === "quarterly"){
+if(
+billingPeriod === "quarterly"
+){
 
 
-annualBill = bill * 4;
+annualBill =
+billValue * 4;
 
 
 }
@@ -99,10 +130,12 @@ annualBill = bill * 4;
 else{
 
 
-annualBill = bill * 12;
+annualBill =
+billValue * 12;
 
 
 }
+
 
 
 
@@ -112,80 +145,73 @@ annualBill = bill * 12;
 
 /*
 ----------------------------------
-Energy usage factors
+Energy usage adjustments
 ----------------------------------
 */
 
 
-let usageMultiplier = 1;
+let usageFactor = 1;
+
+
 
 
 
 if(
-document.getElementById(
-"aircon"
-).checked
+document.getElementById("aircon").checked
 ){
 
-usageMultiplier +=0.1;
+usageFactor +=0.10;
 
 }
 
 
 
 if(
-document.getElementById(
-"ev"
-).checked
+document.getElementById("ev").checked
 ){
 
-usageMultiplier +=0.15;
+usageFactor +=0.15;
 
 }
 
 
 
 if(
-document.getElementById(
-"pool"
-).checked
+document.getElementById("pool").checked
 ){
 
-usageMultiplier +=0.1;
+usageFactor +=0.10;
 
 }
 
 
 
 if(
-document.getElementById(
-"pump"
-).checked
+document.getElementById("pump").checked
 ){
 
-usageMultiplier +=0.2;
+usageFactor +=0.20;
 
 }
 
 
 
 if(
-document.getElementById(
-"machinery"
-).checked
+document.getElementById("machinery").checked
 ){
 
-usageMultiplier +=0.25;
+usageFactor +=0.25;
 
 }
+
 
 
 
 
 
 annualBill =
-annualBill *
-usageMultiplier;
+annualBill * usageFactor;
+
 
 
 
@@ -196,7 +222,7 @@ usageMultiplier;
 
 /*
 ----------------------------------
-Solar size calculation
+Recommend solar size
 ----------------------------------
 */
 
@@ -205,32 +231,36 @@ let solarSize;
 
 
 
-if(annualBill < 4000){
-
+if(
+annualBill <= 3500
+){
 
 solarSize = 6;
 
 
 }
 
-else if(annualBill < 7000){
-
+else if(
+annualBill <=7000
+){
 
 solarSize = 10;
 
 
 }
 
-else if(annualBill < 12000){
-
+else if(
+annualBill <=12000
+){
 
 solarSize = 15;
 
 
 }
 
-else if(annualBill < 20000){
-
+else if(
+annualBill <=20000
+){
 
 solarSize = 25;
 
@@ -240,11 +270,10 @@ solarSize = 25;
 else{
 
 
-solarSize = 50;
+solarSize = 40;
 
 
 }
-
 
 
 
@@ -254,9 +283,19 @@ solarSize = 50;
 
 /*
 ----------------------------------
-Property adjustment
+Property adjustments
 ----------------------------------
 */
+
+
+if(
+selectedProperty === "Business"
+){
+
+solarSize *=1.25;
+
+}
+
 
 
 if(
@@ -264,7 +303,6 @@ selectedProperty === "Commercial"
 ){
 
 solarSize *=1.5;
-
 
 }
 
@@ -274,8 +312,7 @@ if(
 selectedProperty === "Farming"
 ){
 
-solarSize *=1.5;
-
+solarSize *=1.75;
 
 }
 
@@ -285,9 +322,11 @@ solarSize *=1.5;
 
 
 solarSize =
+
 Math.round(
 solarSize
 );
+
 
 
 
@@ -303,7 +342,7 @@ Battery recommendation
 */
 
 
-const batteryChoice =
+const batteryPreference =
 
 document.getElementById(
 "batteryPreference"
@@ -316,18 +355,46 @@ let battery;
 
 
 if(
-batteryChoice === "none"
+batteryPreference === "none"
 ){
 
 
+/*
+Automatic recommendation
+*/
+
+
+if(
+annualBill > 12000
+){
+
 battery =
-"No Battery";
+"20kWh Battery Recommended";
+
+}
+
+else if(
+annualBill >7000
+){
+
+battery =
+"13.5kWh Battery Recommended";
+
+}
+
+else{
+
+
+battery =
+"Battery Optional";
+
+}
 
 
 }
 
 else if(
-batteryChoice === "small"
+batteryPreference === "small"
 ){
 
 
@@ -338,7 +405,7 @@ battery =
 }
 
 else if(
-batteryChoice === "medium"
+batteryPreference === "medium"
 ){
 
 
@@ -372,62 +439,45 @@ Savings calculation
 */
 
 
-const solarGeneration =
+const generation =
 
 solarSize *
+
 SOLAR_CONFIG.solarProductionPerKW;
 
 
 
 
 
-const usableSolar =
+const selfUsedEnergy =
 
-solarGeneration *
+generation *
+
 SOLAR_CONFIG.selfConsumptionTarget;
 
 
 
 
 
-const savings =
+let annualSavings =
 
-usableSolar *
+selfUsedEnergy *
+
 SOLAR_CONFIG.electricityRate;
 
 
 
 
 
+// limit savings
 
-
-const payback =
+annualSavings =
 
 Math.round(
+annualSavings
+);
 
-(
-solarSize * 1000
-+
-(
-battery.includes("Battery")
-?
-12000
-:
-0
-)
-)
 
-/
-
-savings
-
-*10
-
-)
-
-/
-
-10;
 
 
 
@@ -438,7 +488,57 @@ savings
 
 /*
 ----------------------------------
-Store assessment
+Estimate payback
+----------------------------------
+*/
+
+
+let systemCost =
+
+solarSize * 900;
+
+
+
+if(
+battery.includes("Battery")
+){
+
+systemCost +=15000;
+
+
+}
+
+
+
+
+const payback =
+
+Math.round(
+
+(
+systemCost /
+
+annualSavings
+
+)
+
+*10
+
+)
+
+/10;
+
+
+
+
+
+
+
+
+
+/*
+----------------------------------
+Save results
 ----------------------------------
 */
 
@@ -446,7 +546,14 @@ Store assessment
 window.assessmentResults = {
 
 
+
 property:selectedProperty,
+
+
+postcode:postcode,
+
+
+ownership:ownership,
 
 
 annualBill:
@@ -456,23 +563,26 @@ annualBill
 ),
 
 
+
 solarSize:
 
 solarSize +
 "kW Solar System",
 
 
+
 battery:battery,
+
 
 
 estimatedSavings:
 
-Math.round(
-savings
-),
+annualSavings,
+
 
 
 payback:payback
+
 
 
 };
@@ -484,7 +594,22 @@ payback:payback
 
 
 
+console.log(
+window.assessmentResults
+);
+
+
+
+
+
+
+
 displayResults();
+
+
+
+
+
 
 
 if(
@@ -494,9 +619,6 @@ typeof createCharts === "function"
 createCharts();
 
 }
-
-
-
 
 
 
@@ -514,24 +636,34 @@ createCharts();
 function displayResults(){
 
 
-const data =
+
+const result =
+
 window.assessmentResults;
 
 
 
-document.getElementById(
+
+
+document
+.getElementById(
 "resultsSection"
 )
-.classList.remove(
+.classList
+.remove(
 "hidden"
 );
 
 
 
-document.getElementById(
+
+
+document
+.getElementById(
 "chartsSection"
 )
-.classList.remove(
+.classList
+.remove(
 "hidden"
 );
 
@@ -539,48 +671,67 @@ document.getElementById(
 
 
 
-document.getElementById(
+
+
+
+document
+.getElementById(
 "solarResult"
 )
 .innerHTML =
-data.solarSize;
+
+result.solarSize;
 
 
 
 
 
-document.getElementById(
+
+
+document
+.getElementById(
 "batteryResult"
 )
 .innerHTML =
-data.battery;
+
+result.battery;
 
 
 
 
 
-document.getElementById(
+
+
+
+document
+.getElementById(
 "savingsResult"
 )
 .innerHTML =
 
 "$" +
 
-data.estimatedSavings.toLocaleString()
+result.estimatedSavings
+.toLocaleString()
+
 +
+
 " / year";
 
 
 
 
 
-document.getElementById(
+
+
+document
+.getElementById(
 "paybackResult"
 )
 .innerHTML =
 
-data.payback
-+
+result.payback +
+
 " years";
 
 
