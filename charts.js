@@ -1,46 +1,37 @@
 /*
 ==================================================
-Solar Savings Assessment Charts
+Solar Savings Assessment
+Interactive Charts
 
 Prepared by:
 Mark Fitzpatrick
 Renewable Energy Specialist
 
-Creates:
-1. Current vs Solar Electricity Costs
-2. 25 Year Savings Projection
-3. Solar Investment Opportunity
-
-Requires:
-Chart.js
-
 ==================================================
 */
 
 
-let costComparisonChart;
+let costChart;
 
-let savingsProjectionChart;
+let savingsChart;
 
-let opportunityChart;
-
-
+let energyChart;
 
 
 
 
 
 
-function refreshCharts(){
 
-
-const results =
-
-window.assessmentResults;
+function createCharts(){
 
 
 
-if(!results){
+const data = window.assessmentResults;
+
+
+
+if(!data){
 
 return;
 
@@ -48,17 +39,40 @@ return;
 
 
 
-createCostComparison(results);
-
-
-createSavingsProjection(results);
-
-
-createOpportunityChart(results);
 
 
 
-}
+
+/*
+----------------------------------
+Calculate chart values
+----------------------------------
+*/
+
+
+const annualBill =
+
+Number(
+data.annualBill
+);
+
+
+
+const annualSavings =
+
+Number(
+data.estimatedSavings
+);
+
+
+
+const remainingCost =
+
+Math.max(
+annualBill - annualSavings,
+0
+);
+
 
 
 
@@ -68,75 +82,36 @@ createOpportunityChart(results);
 
 
 /*
-==================================================
-GRAPH 1
-
-CURRENT ENERGY COST VS SOLAR
-
-==================================================
+----------------------------------
+Chart 1
+Before vs After Solar
+----------------------------------
 */
 
 
-function createCostComparison(results){
-
-
-
-const canvas =
+const costCanvas =
 
 document.getElementById(
-"savingsChart"
+"costChart"
 );
 
 
 
-if(!canvas){
+if(costCanvas){
 
-return;
+
+
+if(costChart){
+
+costChart.destroy();
 
 }
 
 
 
-if(costComparisonChart){
+costChart = new Chart(
 
-costComparisonChart.destroy();
-
-}
-
-
-
-
-
-
-
-const currentCost =
-
-results.annualBill;
-
-
-
-const solarCost =
-
-Math.max(
-
-currentCost -
-results.estimatedSavings,
-
-0
-
-);
-
-
-
-
-
-
-
-costComparisonChart =
-
-new Chart(
-
-canvas,
+costCanvas,
 
 {
 
@@ -144,18 +119,14 @@ canvas,
 type:"bar",
 
 
-
 data:{
-
 
 
 labels:[
 
-
-"Current Electricity",
+"Before Solar",
 
 "After Solar"
-
 
 ],
 
@@ -166,46 +137,34 @@ datasets:[{
 
 label:
 
-"Estimated Annual Cost",
+"Annual Electricity Cost",
 
 
 
 data:[
 
+annualBill,
 
-currentCost,
-
-
-solarCost
-
+remainingCost
 
 ]
 
-
-
 }]
 
-
-
 },
-
 
 
 
 options:{
 
 
-
 responsive:true,
-
 
 
 plugins:{
 
 
-
 title:{
-
 
 
 display:true,
@@ -213,32 +172,20 @@ display:true,
 
 text:
 
-"Potential Electricity Cost Reduction"
-
-
-
-},
-
-
-
-legend:{
-
-
-display:false
-
-
-}
-
-
-
-}
-
+"Electricity Cost Comparison"
 
 
 }
 
 
 }
+
+
+}
+
+
+}
+
 
 );
 
@@ -255,55 +202,17 @@ display:false
 
 
 /*
-==================================================
-GRAPH 2
-
-25 YEAR SAVINGS
-
-==================================================
+----------------------------------
+Chart 2
+25 Year Savings
+----------------------------------
 */
 
 
-function createSavingsProjection(results){
-
-
-
-const canvas =
-
-document.getElementById(
-"projectionChart"
-);
-
-
-
-if(!canvas){
-
-return;
-
-}
-
-
-
-if(savingsProjectionChart){
-
-savingsProjectionChart.destroy();
-
-}
-
-
-
-
-
-let years=[];
-
-let savings=[];
+const projection=[];
 
 
 let total=0;
-
-
-
-
 
 
 
@@ -314,27 +223,12 @@ year++
 ){
 
 
-
-total +=
-
-results.estimatedSavings;
+total += annualSavings;
 
 
-
-years.push(
-
-year
-
+projection.push(
+total
 );
-
-
-
-savings.push(
-
-Math.round(total)
-
-);
-
 
 
 }
@@ -345,11 +239,30 @@ Math.round(total)
 
 
 
-savingsProjectionChart =
+const savingsCanvas =
 
-new Chart(
+document.getElementById(
+"savingsChart"
+);
 
-canvas,
+
+
+if(savingsCanvas){
+
+
+
+if(savingsChart){
+
+savingsChart.destroy();
+
+}
+
+
+
+
+savingsChart = new Chart(
+
+savingsCanvas,
 
 {
 
@@ -361,8 +274,11 @@ type:"line",
 data:{
 
 
+labels:[
 
-labels:years,
+1,5,10,15,20,25
+
+],
 
 
 
@@ -371,41 +287,45 @@ datasets:[{
 
 label:
 
-"Cumulative Savings ($)",
+"25 Year Savings"
 
 
 
-data:savings,
+,
 
+data:[
 
+projection[0],
 
-fill:true
+projection[4],
 
+projection[9],
+
+projection[14],
+
+projection[19],
+
+projection[24]
+
+]
 
 
 }]
 
-
-
 },
-
 
 
 
 options:{
 
 
-
 responsive:true,
-
 
 
 plugins:{
 
 
-
 title:{
-
 
 
 display:true,
@@ -413,28 +333,29 @@ display:true,
 
 text:
 
-"25 Year Solar Savings Potential"
-
-
-
-}
-
-
-
-}
-
+"Long Term Savings Projection"
 
 
 }
 
 
 }
+
+
+}
+
+
+}
+
+
 
 );
 
 
 
 }
+
+
 
 
 
@@ -445,20 +366,22 @@ text:
 
 
 /*
-==================================================
-GRAPH 3
-
-SOLAR OPPORTUNITY
-
-==================================================
+----------------------------------
+Chart 3
+Energy Independence
+----------------------------------
 */
 
 
-function createOpportunityChart(results){
+const solarPercent = 75;
+
+
+const gridPercent = 25;
 
 
 
-const canvas =
+
+const energyCanvas =
 
 document.getElementById(
 "energyChart"
@@ -466,17 +389,13 @@ document.getElementById(
 
 
 
-if(!canvas){
-
-return;
-
-}
+if(energyCanvas){
 
 
 
-if(opportunityChart){
+if(energyChart){
 
-opportunityChart.destroy();
+energyChart.destroy();
 
 }
 
@@ -484,30 +403,9 @@ opportunityChart.destroy();
 
 
 
+energyChart = new Chart(
 
-
-
-const systemCost =
-
-results.systemCost;
-
-
-
-const savings =
-
-results.estimatedSavings;
-
-
-
-
-
-
-
-opportunityChart =
-
-new Chart(
-
-canvas,
+energyCanvas,
 
 {
 
@@ -516,18 +414,14 @@ type:"doughnut",
 
 
 
-
 data:{
-
 
 
 labels:[
 
+"Solar Energy",
 
-"Solar Investment",
-
-"Annual Savings"
-
+"Grid Energy"
 
 ],
 
@@ -538,40 +432,29 @@ datasets:[{
 
 data:[
 
+solarPercent,
 
-systemCost,
-
-
-savings
-
+gridPercent
 
 ]
 
 
-
 }]
 
-
-
 },
-
 
 
 
 options:{
 
 
-
 responsive:true,
-
 
 
 plugins:{
 
 
-
 title:{
-
 
 
 display:true,
@@ -579,24 +462,29 @@ display:true,
 
 text:
 
-"Solar Investment Opportunity"
-
-
-
-}
-
-
-
-}
-
+"Energy Independence"
 
 
 }
 
 
 }
+
+
+}
+
+
+}
+
+
 
 );
+
+
+
+}
+
+
 
 
 
