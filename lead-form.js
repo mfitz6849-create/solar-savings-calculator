@@ -3,7 +3,6 @@
 Solar Savings Assessment
 Lead Capture System
 
-Prepared by:
 Mark Fitzpatrick
 Renewable Energy Specialist
 
@@ -12,10 +11,7 @@ Renewable Energy Specialist
 
 
 const GOOGLE_SCRIPT_URL =
-
 "https://script.google.com/macros/s/AKfycbzshCCI99nyGWmAhca3oEsk1gNQTXmbqyF5Pi8KMxqTYWmzVLA8wCVTtkiVs4stN0uR/exec";
-
-
 
 
 
@@ -25,21 +21,20 @@ function captureLead(){
 console.log("captureLead started");
 
 
-
-// Get customer details
-
-
-const name = document.getElementById("leadName")?.value || "";
-
-const mobile = document.getElementById("leadMobile")?.value || "";
-
-const email = document.getElementById("leadEmail")?.value || "";
+const name =
+document.getElementById("leadName").value;
 
 
+const mobile =
+document.getElementById("leadMobile").value;
+
+
+const email =
+document.getElementById("leadEmail").value;
 
 
 
-if(name === "" || mobile === "" || email === ""){
+if(!name || !mobile || !email){
 
 
 alert(
@@ -49,31 +44,16 @@ alert(
 
 return;
 
-
 }
 
 
-
-
-
-// Get calculator results
 
 
 let assessment = window.assessmentResults;
 
 
 
-
-
-// Safety fallback for testing
-
-
 if(!assessment){
-
-
-console.log(
-"No assessment results found"
-);
 
 
 assessment = {
@@ -81,15 +61,15 @@ assessment = {
 
 property:"Residential",
 
-annualBill:0,
+annualBill:"",
 
-solarSize:"Assessment required",
+solarSize:"",
 
-battery:"Assessment required",
+battery:"",
 
-estimatedSavings:0,
+estimatedSavings:"",
 
-payback:"TBC"
+payback:""
 
 
 };
@@ -101,12 +81,11 @@ payback:"TBC"
 
 
 
-
-
 const lead = {
 
 
-date:new Date().toLocaleString("en-AU"),
+date:
+new Date().toLocaleString("en-AU"),
 
 
 name:name,
@@ -119,39 +98,27 @@ email:email,
 
 
 property:
-
-assessment.property || "",
-
+assessment.property,
 
 
 annualBill:
-
-assessment.annualBill || "",
-
+assessment.annualBill,
 
 
 solar:
-
-assessment.solarSize || "",
-
+assessment.solarSize,
 
 
 battery:
-
-assessment.battery || "",
-
+assessment.battery,
 
 
 savings:
-
-assessment.estimatedSavings || "",
-
+assessment.estimatedSavings,
 
 
 payback:
-
-assessment.payback || ""
-
+assessment.payback
 
 
 };
@@ -160,19 +127,12 @@ assessment.payback || ""
 
 
 
-
-
 console.log(
-"Sending lead:",
 lead
 );
 
 
 
-
-
-
-// Save local backup
 
 
 localStorage.setItem(
@@ -187,9 +147,6 @@ JSON.stringify(lead)
 
 
 
-
-
-// Send to Google Sheets
 
 
 fetch(
@@ -213,7 +170,9 @@ headers:{
 },
 
 
-body:JSON.stringify(lead)
+body:
+
+JSON.stringify(lead)
 
 
 }
@@ -224,7 +183,7 @@ body:JSON.stringify(lead)
 
 
 console.log(
-"Lead sent"
+"Lead submitted"
 );
 
 
@@ -234,14 +193,11 @@ console.log(
 
 
 console.error(
-"Lead error:",
 error
 );
 
 
 });
-
-
 
 
 
@@ -254,73 +210,22 @@ alert(
 +
 name
 +
-".
-
-Your Solar Savings Assessment is being prepared."
+". Your Solar Savings Assessment is being prepared."
 
 );
 
 
 
-
-
-
-
-
-// Create browser PDF if available
 
 
 if(typeof generateProposal === "function"){
 
 
-setTimeout(function(){
-
-
 generateProposal();
 
 
-},1000);
-
-
 }
 
-
-
-}
-
-
-
-
-
-
-// Test function
-
-function testLead(){
-
-
-window.assessmentResults={
-
-
-property:"Residential",
-
-annualBill:5000,
-
-solarSize:"10kW Solar System",
-
-battery:"13.5kWh Battery",
-
-estimatedSavings:3200,
-
-payback:4
-
-
-};
-
-
-
-console.log(
-"Test assessment loaded"
-);
 
 
 }
