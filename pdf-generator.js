@@ -19,7 +19,7 @@ if(!window.jspdf){
 
 
 alert(
-"PDF library not loaded."
+"PDF system not loaded."
 );
 
 
@@ -27,6 +27,7 @@ return;
 
 
 }
+
 
 
 
@@ -47,18 +48,17 @@ const doc = new jsPDF(
 
 
 
-
-const customer =
-
-getLeadData();
-
-
-
-
 const assessment =
 
 window.assessmentResults;
 
+
+
+
+
+const customer =
+
+getLeadData();
 
 
 
@@ -69,7 +69,7 @@ if(!assessment){
 
 
 alert(
-"No assessment data available."
+"Complete the assessment before generating the report."
 );
 
 
@@ -84,7 +84,8 @@ return;
 
 
 
-const today =
+
+const date =
 
 new Date()
 
@@ -98,13 +99,12 @@ new Date()
 
 
 
-
-
 /*
-----------------------------------
-Page 1 Cover
-----------------------------------
+=====================================
+PAGE 1 COVER
+=====================================
 */
+
 
 
 doc.setFillColor(
@@ -114,13 +114,23 @@ doc.setFillColor(
 );
 
 
+
 doc.rect(
+
 0,
+
 0,
+
 210,
-45,
+
+50,
+
 "F"
+
 );
+
+
+
 
 
 
@@ -132,9 +142,13 @@ doc.setTextColor(
 );
 
 
+
+
+
 doc.setFontSize(
 24
 );
+
 
 
 doc.text(
@@ -150,9 +164,11 @@ doc.text(
 
 
 
+
 doc.setFontSize(
 13
 );
+
 
 
 doc.text(
@@ -161,9 +177,11 @@ doc.text(
 
 20,
 
-35
+37
 
 );
+
+
 
 
 
@@ -180,19 +198,35 @@ doc.setTextColor(
 
 
 doc.setFontSize(
-22
+24
 );
+
 
 
 doc.text(
 
-"Solar Savings Assessment",
+"Solar Savings",
 
 20,
 
-80
+85
 
 );
+
+
+
+doc.text(
+
+"Assessment Report",
+
+20,
+
+98
+
+);
+
+
+
 
 
 
@@ -202,17 +236,16 @@ doc.setFontSize(
 );
 
 
+
 doc.text(
 
 "Prepared for:",
 
 20,
 
-105
+130
 
 );
-
-
 
 
 
@@ -221,15 +254,102 @@ doc.setFontSize(
 );
 
 
+
 doc.text(
 
 customer.name || "Customer",
 
 20,
 
-120
+145
 
 );
+
+
+
+
+
+
+
+doc.setFontSize(
+12
+);
+
+
+
+doc.text(
+
+"Assessment Date: " + date,
+
+20,
+
+160
+
+);
+
+
+
+
+
+
+
+// Photo
+
+
+const photo =
+
+document.getElementById(
+"profilePhoto"
+);
+
+
+
+
+
+if(photo){
+
+
+
+try{
+
+
+doc.addImage(
+
+photo,
+
+"PNG",
+
+155,
+
+70,
+
+35,
+
+45
+
+);
+
+
+
+}
+
+catch(e){
+
+
+console.log(
+"Photo unavailable"
+);
+
+
+}
+
+
+
+}
+
+
+
+
 
 
 
@@ -240,37 +360,10 @@ doc.setFontSize(
 );
 
 
-doc.text(
-
-"Assessment Date: " + today,
-
-20,
-
-135
-
-);
-
-
-
-
-
-
 
 doc.text(
 
 "M: 0434 151 237",
-
-20,
-
-220
-
-);
-
-
-
-doc.text(
-
-"mark.fitzpatrick@classaenergy.com.au",
 
 20,
 
@@ -282,7 +375,7 @@ doc.text(
 
 doc.text(
 
-"ABN: 40 893 359 837",
+"mark.fitzpatrick@classaenergy.com.au",
 
 20,
 
@@ -290,6 +383,17 @@ doc.text(
 
 );
 
+
+
+doc.text(
+
+"ABN: 40 893 359 837",
+
+20,
+
+250
+
+);
 
 
 
@@ -301,9 +405,9 @@ doc.text(
 
 
 /*
-----------------------------------
-Page 2 Summary
-----------------------------------
+=====================================
+PAGE 2 SUMMARY
+=====================================
 */
 
 
@@ -312,14 +416,14 @@ doc.addPage();
 
 
 doc.setFontSize(
-20
+22
 );
 
 
 
 doc.text(
 
-"Recommended Energy Solution",
+"Recommended Solar Solution",
 
 20,
 
@@ -330,15 +434,29 @@ doc.text(
 
 
 
-let summary = [
-
-"Property Type: " + assessment.property,
 
 
-"Solar System: " + assessment.solarSize,
+
+const summary = [
 
 
-"Battery: " + assessment.battery,
+
+"Property Type: " +
+
+assessment.property,
+
+
+
+"Solar System: " +
+
+assessment.solarSize,
+
+
+
+"Battery Recommendation: " +
+
+assessment.battery,
+
 
 
 "Estimated Annual Savings: $" +
@@ -359,19 +477,25 @@ assessment.payback +
 
 " years"
 
+
+
 ];
 
 
 
 
 
-let y=60;
+
+
+
+let y = 65;
 
 
 
 summary.forEach(
 
-function(item){
+function(line){
+
 
 
 doc.roundedRect(
@@ -382,7 +506,7 @@ y-10,
 
 170,
 
-18,
+20,
 
 3,
 
@@ -391,23 +515,26 @@ y-10,
 );
 
 
+
 doc.setFontSize(
 12
 );
 
 
+
 doc.text(
 
-item,
+line,
 
 30,
 
-y+2
+y+3
 
 );
 
 
-y+=30;
+
+y += 30;
 
 
 
@@ -423,49 +550,71 @@ y+=30;
 
 
 
+
+
 /*
-----------------------------------
-Graphs
-----------------------------------
+=====================================
+PAGE 3 COST GRAPH
+=====================================
 */
 
 
-
-addChartToPDF(
+addGraphPage(
 
 doc,
 
-"costChart",
+"Electricity Cost Comparison",
 
-"Electricity Cost Comparison"
+"costChart"
 
 );
 
 
 
 
-addChartToPDF(
+
+
+/*
+=====================================
+PAGE 4 SAVINGS GRAPH
+=====================================
+*/
+
+
+addGraphPage(
 
 doc,
 
-"savingsChart",
+"25 Year Savings Projection",
 
-"25 Year Savings Projection"
+"savingsChart"
 
 );
 
 
 
 
-addChartToPDF(
+
+
+
+/*
+=====================================
+PAGE 5 ENERGY GRAPH
+=====================================
+*/
+
+
+addGraphPage(
 
 doc,
 
-"energyChart",
+"Energy Independence",
 
-"Energy Independence"
+"energyChart"
 
 );
+
+
 
 
 
@@ -476,13 +625,14 @@ doc,
 
 
 /*
-----------------------------------
-Final page
-----------------------------------
+=====================================
+PAGE 6 NEXT STEPS
+=====================================
 */
 
 
 doc.addPage();
+
 
 
 
@@ -491,15 +641,20 @@ doc.setFontSize(
 );
 
 
+
 doc.text(
 
-"Next Steps",
+"Your Next Steps",
 
 20,
 
 35
 
 );
+
+
+
+
 
 
 
@@ -513,29 +668,101 @@ doc.text(
 
 [
 
-"Your Solar Savings Assessment provides an initial estimate.",
+"Your assessment provides an initial solar opportunity estimate.",
 
 "",
 
-"Next steps:",
+"Recommended next steps:",
 
 "",
 
-"✓ Confirm energy usage",
+"✓ Review your electricity usage",
 
-"✓ Final system design",
+"✓ Confirm system design",
 
-"✓ Battery optimisation",
+"✓ Review battery options",
 
-"✓ Installation options"
+"✓ Discuss installation timing"
 
 ],
 
 20,
 
-65
+70
 
 );
+
+
+
+
+
+
+doc.setFontSize(
+12
+);
+
+
+
+doc.text(
+
+"Prepared by Mark Fitzpatrick",
+
+20,
+
+220
+
+);
+
+
+
+doc.text(
+
+"Renewable Energy Specialist",
+
+20,
+
+230
+
+);
+
+
+
+doc.text(
+
+"M: 0434 151 237",
+
+20,
+
+240
+
+);
+
+
+
+doc.text(
+
+"mark.fitzpatrick@classaenergy.com.au",
+
+20,
+
+250
+
+);
+
+
+
+doc.text(
+
+"ABN: 40 893 359 837",
+
+20,
+
+260
+
+);
+
+
+
 
 
 
@@ -556,6 +783,10 @@ doc.save(
 
 
 
+
+
+
+
 }
 
 
@@ -566,13 +797,13 @@ doc.save(
 
 
 
-function addChartToPDF(
+function addGraphPage(
 
 doc,
 
-canvasID,
+title,
 
-title
+canvasID
 
 ){
 
@@ -583,6 +814,7 @@ const canvas =
 document.getElementById(
 canvasID
 );
+
 
 
 
@@ -601,8 +833,10 @@ doc.addPage();
 
 
 
+
+
 doc.setFontSize(
-18
+20
 );
 
 
@@ -620,12 +854,17 @@ title,
 
 
 
+
+
+
 const image =
 
 canvas.toDataURL(
 "image/png",
 1.0
 );
+
+
 
 
 
@@ -639,13 +878,14 @@ image,
 
 20,
 
-45,
+50,
 
 170,
 
 100
 
 );
+
 
 
 
