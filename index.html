@@ -11,7 +11,9 @@
 Solar Savings Assessment | Mark Fitzpatrick
 </title>
 
+
 <link rel="stylesheet" href="style.css">
+
 
 </head>
 
@@ -19,36 +21,27 @@ Solar Savings Assessment | Mark Fitzpatrick
 <body>
 
 
-<header class="header">
+<header class="hero">
 
 
-<div class="brand">
+<div class="container">
+
 
 <h1>
 Solar Savings Assessment
 </h1>
 
+
+<h2>
+Find out how much you could save with solar and battery storage
+</h2>
+
+
 <p>
-Discover your solar savings potential in less than 60 seconds
+Prepared by Mark Fitzpatrick<br>
+Renewable Energy Specialist
 </p>
 
-</div>
-
-
-
-<div class="consultant">
-
-<strong>
-Mark Fitzpatrick
-</strong>
-
-<br>
-
-Renewable Energy Specialist
-
-<br>
-
-M: 0434 151 237
 
 </div>
 
@@ -59,15 +52,41 @@ M: 0434 151 237
 
 
 
+<section class="container">
 
 
+<h2>
+Step 1 - Select Your Property Type
+</h2>
 
-<div class="progress-container">
 
-<div id="progressBar"></div>
+<div class="options">
+
+
+<button onclick="selectProperty('Residential')">
+🏠 Residential
+</button>
+
+
+<button onclick="selectProperty('Business')">
+🏢 Business
+</button>
+
+
+<button onclick="selectProperty('Commercial')">
+🏭 Commercial
+</button>
+
+
+<button onclick="selectProperty('Farming')">
+🚜 Farming
+</button>
+
 
 </div>
 
+
+</section>
 
 
 
@@ -79,572 +98,51 @@ M: 0434 151 237
 <section class="container">
 
 
-
-<!-- WELCOME -->
-
-
-<div class="step" id="step1">
-
-
 <h2>
-Find Out How Much You Could Save With Solar
+Step 2 - Your Electricity Usage
 </h2>
 
 
 
-<p>
-
-Complete this free assessment to discover:
-
-</p>
-
-
-
-<ul>
-
-<li>☀️ Recommended solar system size</li>
-
-<li>🔋 Battery storage options</li>
-
-<li>💰 Estimated annual savings</li>
-
-<li>📈 Long-term energy benefits</li>
-
-</ul>
-
-
-
-<p>
-
-Takes less than 60 seconds.
-
-</p>
-
-
-
-
-<button
-class="primary"
-onclick="nextStep(2)">
-
-Start My Free Assessment
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- PROPERTY TYPE -->
-
-
-<div class="step hidden" id="step2">
-
-
-<h2>
-Step 1 of 4
-</h2>
-
-
-<h3>
-What type of property are you assessing?
-</h3>
-
-
-
-
-
-<div class="grid">
-
-
-
-<div class="card option"
-onclick="selectProperty('Residential');nextStep(3)">
-
-<h3>
-🏠 Residential
-</h3>
-
-<p>
-Homeowners and families
-</p>
-
-</div>
-
-
-
-
-<div class="card option"
-onclick="selectProperty('Business');nextStep(3)">
-
-<h3>
-🏢 Business
-</h3>
-
-<p>
-Offices, shops and workplaces
-</p>
-
-</div>
-
-
-
-
-
-<div class="card option"
-onclick="selectProperty('Commercial');nextStep(3)">
-
-<h3>
-🏭 Commercial
-</h3>
-
-<p>
-Factories, warehouses and large sites
-</p>
-
-</div>
-
-
-
-
-
-<div class="card option"
-onclick="selectProperty('Farming');nextStep(3)">
-
-<h3>
-🚜 Farming
-</h3>
-
-<p>
-Agriculture and rural properties
-</p>
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- ELECTRICITY BILL -->
-
-
-<div class="step hidden" id="step3">
-
-
-<h2>
-Step 2 of 4
-</h2>
-
-
-<h3>
-Approximately how much is your electricity bill?
-</h3>
-
-
-
-
-<div class="card">
+<label>
+Approximate electricity bill
+</label>
 
 
 <select id="billAmount">
 
 
 <option value="">
-Select monthly electricity cost
+Select your average bill
 </option>
 
 
-<option value="150">
-$100 - $200/month
+<option value="200">
+$200 per month
 </option>
 
 
-<option value="300">
-$200 - $400/month
+<option value="400">
+$400 per month
 </option>
 
 
 <option value="600">
-$400 - $800/month
+$600 per month
 </option>
 
 
-<option value="1000">
-$800 - $1,500/month
+<option value="800">
+$800 per month
 </option>
 
 
-<option value="2000">
-$1,500 - $3,000/month
-</option>
-
-
-<option value="4000">
-$3,000+/month
+<option value="1200">
+$1200+ per month
 </option>
 
 
 </select>
-
-
-</div>
-
-
-
-
-<button
-class="primary"
-onclick="nextStep(4)">
-
-Continue
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- ENERGY PROFILE -->
-
-
-<div class="step hidden" id="step4">
-
-
-<h2>
-Step 3 of 4
-</h2>
-
-
-<h3>
-What energy systems do you have?
-</h3>
-
-
-
-<div class="card checklist">
-
-
-<label>
-<input type="checkbox">
-Air conditioning
-</label>
-
-
-<label>
-<input type="checkbox">
-Pool
-</label>
-
-
-<label>
-<input type="checkbox">
-Electric hot water
-</label>
-
-
-<label>
-<input type="checkbox">
-EV charger
-</label>
-
-
-<label>
-<input type="checkbox">
-Refrigeration
-</label>
-
-
-<label>
-<input type="checkbox">
-Pumps / irrigation
-</label>
-
-
-<label>
-<input type="checkbox">
-Machinery
-</label>
-
-
-</div>
-
-
-
-
-
-<button
-class="primary"
-onclick="nextStep(5)">
-
-Continue
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- BATTERY -->
-
-
-<div class="step hidden" id="step5">
-
-
-<h2>
-Step 4 of 4
-</h2>
-
-
-<h3>
-Are you interested in battery storage?
-</h3>
-
-
-
-
-<div class="grid">
-
-
-<div class="card option"
-onclick="selectBattery('Yes');calculateSolar();nextStep(6)">
-
-🔋 Yes - maximise savings
-
-</div>
-
-
-
-<div class="card option"
-onclick="selectBattery('Maybe');calculateSolar();nextStep(6)">
-
-🔋 Show me options
-
-</div>
-
-
-
-<div class="card option"
-onclick="selectBattery('No');calculateSolar();nextStep(6)">
-
-☀️ Solar only
-
-</div>
-
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- RESULTS -->
-
-
-<div class="step hidden" id="step6">
-
-
-<h2>
-Your Solar Opportunity
-</h2>
-
-
-
-
-<div class="results-grid">
-
-
-<div class="result-card">
-
-<h3>
-Property
-</h3>
-
-<p id="resultProperty">
--
-</p>
-
-</div>
-
-
-
-
-<div class="result-card">
-
-<h3>
-Recommended Solar
-</h3>
-
-<p id="solarRecommendation">
--
-</p>
-
-</div>
-
-
-
-
-<div class="result-card">
-
-<h3>
-Battery Option
-</h3>
-
-<p id="batteryRecommendation">
--
-</p>
-
-</div>
-
-
-
-
-<div class="result-card">
-
-<h3>
-Estimated Savings
-</h3>
-
-<p id="estimatedSavings">
--
-</p>
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-<p>
-
-This is an initial estimate based on your energy costs.
-A detailed assessment confirms the final design.
-
-</p>
-
-
-
-
-<button
-class="primary"
-onclick="nextStep(7)">
-
-Get My Personal Report
-
-</button>
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<!-- LEAD CAPTURE -->
-
-
-<div class="step hidden" id="step7">
-
-
-<h2>
-Where should we send your report?
-</h2>
-
-
-
-
-<div class="card">
-
-
-<label>
-Name
-</label>
-
-<input id="leadName">
-
-
-
-<label>
-Mobile
-</label>
-
-<input id="leadMobile">
-
-
-
-<label>
-Email
-</label>
-
-<input id="leadEmail">
-
-
-
-</div>
-
-
-
-
-<button onclick="captureLead()">
-Send My Solar Report
-</button>
-
-
-
-</div>
-
-
-
-
 
 
 
@@ -658,28 +156,221 @@ Send My Solar Report
 
 
 
-<section class="trust">
-
-
-<img
-src="mark-photo.png"
-class="profile-photo">
-
+<section class="container">
 
 
 <h2>
-Prepared By
+Step 3 - Energy Requirements
 </h2>
 
 
-<h3>
-Mark Fitzpatrick
-</h3>
+
+<label>
+Do you have high energy usage?
+</label>
+
+
+<div class="options">
+
+
+<button onclick="toggleEnergy('aircon')">
+❄️ Air Conditioning
+</button>
+
+
+<button onclick="toggleEnergy('ev')">
+🚗 Electric Vehicle
+</button>
+
+
+<button onclick="toggleEnergy('pool')">
+🏊 Pool
+</button>
+
+
+<button onclick="toggleEnergy('pump')">
+💧 Pumps / Irrigation
+</button>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="container">
+
+
+<h2>
+Step 4 - Battery Storage
+</h2>
+
+
+
+<select id="batteryChoice">
+
+
+<option value="No Battery">
+No Battery
+</option>
+
+
+<option value="Small Battery">
+Small Battery (5-10kWh)
+</option>
+
+
+<option value="Medium Battery">
+Medium Battery (10-15kWh)
+</option>
+
+
+<option value="Large Battery">
+Large Battery (15-30kWh)
+</option>
+
+
+</select>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="container">
+
+
+<button class="primary"
+onclick="calculateSolar()">
+
+Calculate My Solar Savings
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="container results">
+
+
+<h2>
+Your Solar Recommendation
+</h2>
+
+
+
+<div id="results">
+
+
+Complete the assessment above to see your recommendation.
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="container">
+
+
+<h2>
+Receive Your Personal Solar Report
+</h2>
 
 
 <p>
-Renewable Energy Specialist
+Enter your details to receive your assessment report.
 </p>
+
+
+
+
+<input
+type="text"
+id="leadName"
+placeholder="Your Name">
+
+
+
+<input
+type="tel"
+id="leadMobile"
+placeholder="Mobile Number">
+
+
+
+<input
+type="email"
+id="leadEmail"
+placeholder="Email Address">
+
+
+
+
+
+
+<button class="primary"
+onclick="captureLead()">
+
+Send My Solar Report
+
+</button>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="container">
+
+
+<canvas id="savingsChart"></canvas>
+
+
+<canvas id="projectionChart"></canvas>
+
+
+<canvas id="energyChart"></canvas>
 
 
 </section>
@@ -694,23 +385,19 @@ Renewable Energy Specialist
 
 <footer>
 
-Solar Savings Assessment
 
-<br><br>
+<p>
 
-Prepared by Mark Fitzpatrick
+Mark Fitzpatrick<br>
 
-<br>
+Renewable Energy Specialist<br>
 
-Renewable Energy Specialist
-
-<br><br>
-
-M: 0434 151 237
-
-<br>
+M: 0434 151 237<br>
 
 mark.fitzpatrick@classaenergy.com.au
+
+</p>
+
 
 </footer>
 
@@ -720,13 +407,22 @@ mark.fitzpatrick@classaenergy.com.au
 
 
 
+
+
+<script src="config.js"></script>
+
+
 <script src="calculator.js"></script>
+
 
 <script src="charts.js"></script>
 
+
 <script src="lead-form.js"></script>
 
+
 <script src="pdf-generator.js"></script>
+
 
 
 </body>
