@@ -1,7 +1,7 @@
 /*
 ==================================================
 Solar Savings Assessment
-Interactive Charts
+Chart Generator
 
 Prepared by:
 Mark Fitzpatrick
@@ -12,11 +12,8 @@ Renewable Energy Specialist
 
 
 let costChart;
-
 let savingsChart;
-
 let energyChart;
-
 
 
 
@@ -27,11 +24,13 @@ function createCharts(){
 
 
 
-const data = window.assessmentResults;
+const assessment =
+
+window.assessmentResults;
 
 
 
-if(!data){
+if(!assessment){
 
 return;
 
@@ -45,7 +44,7 @@ return;
 
 /*
 ----------------------------------
-Calculate chart values
+Data preparation
 ----------------------------------
 */
 
@@ -53,15 +52,15 @@ Calculate chart values
 const annualBill =
 
 Number(
-data.annualBill
+assessment.annualBill
 );
 
 
 
-const annualSavings =
+const savings =
 
 Number(
-data.estimatedSavings
+assessment.estimatedSavings
 );
 
 
@@ -69,11 +68,12 @@ data.estimatedSavings
 const remainingCost =
 
 Math.max(
-annualBill - annualSavings,
+
+annualBill - savings,
+
 0
+
 );
-
-
 
 
 
@@ -84,7 +84,7 @@ annualBill - annualSavings,
 /*
 ----------------------------------
 Chart 1
-Before vs After Solar
+Electricity Cost Comparison
 ----------------------------------
 */
 
@@ -109,6 +109,8 @@ costChart.destroy();
 
 
 
+
+
 costChart = new Chart(
 
 costCanvas,
@@ -119,7 +121,9 @@ costCanvas,
 type:"bar",
 
 
+
 data:{
+
 
 
 labels:[
@@ -155,6 +159,7 @@ remainingCost
 
 
 
+
 options:{
 
 
@@ -172,7 +177,17 @@ display:true,
 
 text:
 
-"Electricity Cost Comparison"
+"Electricity Cost Reduction"
+
+
+},
+
+
+
+legend:{
+
+
+display:false
 
 
 }
@@ -181,10 +196,13 @@ text:
 }
 
 
+
 }
 
 
+
 }
+
 
 
 );
@@ -209,30 +227,34 @@ Chart 2
 */
 
 
-const projection=[];
+const years = [];
+
+const projection = [];
 
 
-let total=0;
+
+let total = 0;
+
 
 
 
 for(
-let year=1;
-year<=25;
-year++
+let i=1;
+i<=25;
+i++
 ){
 
 
-total += annualSavings;
+years.push(i);
 
 
-projection.push(
-total
-);
+total += savings;
+
+
+projection.push(total);
 
 
 }
-
 
 
 
@@ -244,6 +266,8 @@ const savingsCanvas =
 document.getElementById(
 "savingsChart"
 );
+
+
 
 
 
@@ -274,11 +298,7 @@ type:"line",
 data:{
 
 
-labels:[
-
-1,5,10,15,20,25
-
-],
+labels:years,
 
 
 
@@ -287,27 +307,12 @@ datasets:[{
 
 label:
 
-"25 Year Savings"
+"Cumulative Savings",
 
 
 
-,
+data:projection
 
-data:[
-
-projection[0],
-
-projection[4],
-
-projection[9],
-
-projection[14],
-
-projection[19],
-
-projection[24]
-
-]
 
 
 }]
@@ -333,7 +338,7 @@ display:true,
 
 text:
 
-"Long Term Savings Projection"
+"25 Year Savings Projection"
 
 
 }
@@ -342,7 +347,9 @@ text:
 }
 
 
+
 }
+
 
 
 }
@@ -373,10 +380,12 @@ Energy Independence
 */
 
 
-const solarPercent = 75;
+const solarContribution = 75;
 
 
-const gridPercent = 25;
+
+const gridContribution = 25;
+
 
 
 
@@ -386,6 +395,8 @@ const energyCanvas =
 document.getElementById(
 "energyChart"
 );
+
+
 
 
 
@@ -419,9 +430,9 @@ data:{
 
 labels:[
 
-"Solar Energy",
+"Solar & Battery",
 
-"Grid Energy"
+"Grid Electricity"
 
 ],
 
@@ -430,11 +441,16 @@ labels:[
 datasets:[{
 
 
+label:
+
+"Energy Source",
+
+
 data:[
 
-solarPercent,
+solarContribution,
 
-gridPercent
+gridContribution
 
 ]
 
@@ -442,6 +458,7 @@ gridPercent
 }]
 
 },
+
 
 
 
@@ -462,7 +479,7 @@ display:true,
 
 text:
 
-"Energy Independence"
+"Estimated Energy Independence"
 
 
 }
@@ -471,7 +488,9 @@ text:
 }
 
 
+
 }
+
 
 
 }
@@ -483,7 +502,6 @@ text:
 
 
 }
-
 
 
 
