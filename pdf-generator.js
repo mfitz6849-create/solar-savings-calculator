@@ -1,13 +1,11 @@
 /*
 ==================================================
-Solar Savings Assessment PDF Generator
+Solar Savings Assessment
+PDF Generator
 
 Prepared by:
 Mark Fitzpatrick
 Renewable Energy Specialist
-
-Creates:
-Personalised Solar Savings Assessment Report
 
 ==================================================
 */
@@ -16,28 +14,12 @@ Personalised Solar Savings Assessment Report
 async function generateProposal(){
 
 
-const { jsPDF } = window.jspdf;
 
-
-const doc = new jsPDF(
-"p",
-"mm",
-"A4"
-);
-
-
-
-const results =
-
-window.assessmentResults;
-
-
-
-if(!results){
+if(!window.jspdf){
 
 
 alert(
-"Please complete your solar assessment first."
+"PDF library not loaded."
 );
 
 
@@ -49,17 +31,60 @@ return;
 
 
 
+
+const { jsPDF } = window.jspdf;
+
+
+
+const doc = new jsPDF(
+"p",
+"mm",
+"A4"
+);
+
+
+
+
+
+
+
 const customer =
 
-document.getElementById(
-"name"
-)?.value ||
-
-"Customer";
+getLeadData();
 
 
 
-const date =
+
+const assessment =
+
+window.assessmentResults;
+
+
+
+
+
+
+
+if(!assessment){
+
+
+alert(
+"No assessment data available."
+);
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+const today =
 
 new Date()
 
@@ -71,46 +96,22 @@ new Date()
 
 
 
-function money(value){
-
-
-return new Intl.NumberFormat(
-"en-AU",
-{
-
-style:"currency",
-
-currency:"AUD",
-
-maximumFractionDigits:0
-
-}
-
-)
-
-.format(value || 0);
-
-
-}
 
 
 
 
-
-
-
-
-// ===================================
-// COVER PAGE
-// ===================================
+/*
+----------------------------------
+Page 1 Cover
+----------------------------------
+*/
 
 
 doc.setFillColor(
 0,
-92,
-151
+102,
+161
 );
-
 
 
 doc.rect(
@@ -124,7 +125,6 @@ doc.rect(
 
 
 
-
 doc.setTextColor(
 255,
 255,
@@ -132,14 +132,14 @@ doc.setTextColor(
 );
 
 
-
-doc.setFontSize(25);
-
+doc.setFontSize(
+24
+);
 
 
 doc.text(
 
-"Solar Savings Assessment",
+"Mark Fitzpatrick",
 
 20,
 
@@ -149,56 +149,21 @@ doc.text(
 
 
 
-doc.setFontSize(13);
 
+doc.setFontSize(
+13
+);
 
 
 doc.text(
 
-"Prepared by Mark Fitzpatrick",
+"Renewable Energy Specialist",
 
 20,
 
 35
 
 );
-
-
-
-
-
-// Photo
-
-try{
-
-
-doc.addImage(
-
-"mark-photo.png",
-
-"PNG",
-
-155,
-
-8,
-
-30,
-
-40
-
-);
-
-
-}
-
-catch(e){
-
-console.log(
-"Photo unavailable"
-);
-
-}
-
 
 
 
@@ -213,40 +178,28 @@ doc.setTextColor(
 
 
 
-doc.setFontSize(22);
 
-
-
-doc.text(
-
-"Personalised Solar",
-
-20,
-
-85
-
+doc.setFontSize(
+22
 );
 
 
-
 doc.text(
 
-"Savings Report",
+"Solar Savings Assessment",
 
 20,
 
-97
+80
 
 );
 
 
 
 
-
-
-
-doc.setFontSize(14);
-
+doc.setFontSize(
+14
+);
 
 
 doc.text(
@@ -255,23 +208,26 @@ doc.text(
 
 20,
 
-130
+105
 
 );
 
 
 
-doc.setFontSize(20);
 
+
+doc.setFontSize(
+18
+);
 
 
 doc.text(
 
-customer,
+customer.name || "Customer",
 
 20,
 
-145
+120
 
 );
 
@@ -279,361 +235,24 @@ customer,
 
 
 
-doc.setFontSize(11);
-
+doc.setFontSize(
+11
+);
 
 
 doc.text(
 
-"Assessment Date: "
-+
-date,
+"Assessment Date: " + today,
 
 20,
 
-160
+135
 
 );
 
 
 
 
-
-
-
-
-
-// ===================================
-// ASSESSMENT SUMMARY
-// ===================================
-
-
-doc.addPage();
-
-
-
-
-doc.setFontSize(22);
-
-
-
-doc.text(
-
-"Your Solar Opportunity",
-
-20,
-
-25
-
-);
-
-
-
-
-
-
-
-const summary = [
-
-
-[
-"Property Type",
-
-results.property
-
-],
-
-
-[
-"Current Electricity Cost",
-
-money(
-results.annualBill
-)
-+
-" / year"
-
-],
-
-
-[
-"Recommended Solar System",
-
-results.solarSize
-
-],
-
-
-[
-"Recommended Battery",
-
-results.battery
-
-],
-
-
-[
-"Estimated Annual Savings",
-
-money(
-results.estimatedSavings
-)
-
-],
-
-
-[
-"Estimated Payback",
-
-results.payback +
-" years"
-
-]
-
-];
-
-
-
-
-
-
-
-let y=55;
-
-
-
-summary.forEach(item=>{
-
-
-
-doc.roundedRect(
-
-20,
-
-y-8,
-
-170,
-
-20,
-
-3,
-
-3
-
-);
-
-
-
-doc.setFontSize(12);
-
-
-
-doc.text(
-
-item[0],
-
-30,
-
-y+5
-
-);
-
-
-
-doc.text(
-
-item[1],
-
-120,
-
-y+5
-
-);
-
-
-
-y += 28;
-
-
-
-});
-
-
-
-
-
-
-
-
-
-// ===================================
-// EXPLANATION PAGE
-// ===================================
-
-
-doc.addPage();
-
-
-
-doc.setFontSize(20);
-
-
-
-doc.text(
-
-"How Your Assessment Was Calculated",
-
-20,
-
-30
-
-);
-
-
-
-doc.setFontSize(13);
-
-
-
-doc.text(
-
-[
-
-"This estimate is based on:",
-
-"",
-
-"• Your property type",
-
-"• Approximate electricity usage",
-
-"• Current energy costs",
-
-"• Typical solar generation",
-
-"• Battery storage suitability",
-
-"",
-
-"A detailed site assessment will confirm the final system design."
-
-],
-
-20,
-
-60
-
-);
-
-
-
-
-
-
-
-
-
-// ===================================
-// NEXT STEPS PAGE
-// ===================================
-
-
-doc.addPage();
-
-
-
-doc.setFontSize(22);
-
-
-
-doc.text(
-
-"Your Next Steps",
-
-20,
-
-35
-
-);
-
-
-
-doc.setFontSize(13);
-
-
-
-doc.text(
-
-[
-
-"✓ Review your solar opportunity",
-
-"",
-
-"✓ Confirm roof and energy requirements",
-
-"",
-
-"✓ Finalise solar and battery design",
-
-"",
-
-"✓ Discuss installation options",
-
-"",
-
-"✓ Start reducing energy costs"
-
-],
-
-20,
-
-70
-
-);
-
-
-
-
-
-
-
-
-
-// ===================================
-// CONTACT PAGE
-// ===================================
-
-
-doc.setFontSize(16);
-
-
-
-doc.text(
-
-"Mark Fitzpatrick",
-
-20,
-
-220
-
-);
-
-
-
-doc.setFontSize(12);
-
-
-
-doc.text(
-
-"Renewable Energy Specialist",
-
-20,
-
-230
-
-);
 
 
 
@@ -643,7 +262,7 @@ doc.text(
 
 20,
 
-240
+220
 
 );
 
@@ -655,7 +274,7 @@ doc.text(
 
 20,
 
-250
+230
 
 );
 
@@ -667,7 +286,7 @@ doc.text(
 
 20,
 
-260
+240
 
 );
 
@@ -678,17 +297,353 @@ doc.text(
 
 
 
+
+
+
+/*
+----------------------------------
+Page 2 Summary
+----------------------------------
+*/
+
+
+doc.addPage();
+
+
+
+doc.setFontSize(
+20
+);
+
+
+
+doc.text(
+
+"Recommended Energy Solution",
+
+20,
+
+30
+
+);
+
+
+
+
+let summary = [
+
+"Property Type: " + assessment.property,
+
+
+"Solar System: " + assessment.solarSize,
+
+
+"Battery: " + assessment.battery,
+
+
+"Estimated Annual Savings: $" +
+
+Number(
+
+assessment.estimatedSavings
+
+)
+
+.toLocaleString(),
+
+
+
+"Estimated Payback: " +
+
+assessment.payback +
+
+" years"
+
+];
+
+
+
+
+
+let y=60;
+
+
+
+summary.forEach(
+
+function(item){
+
+
+doc.roundedRect(
+
+20,
+
+y-10,
+
+170,
+
+18,
+
+3,
+
+3
+
+);
+
+
+doc.setFontSize(
+12
+);
+
+
+doc.text(
+
+item,
+
+30,
+
+y+2
+
+);
+
+
+y+=30;
+
+
+
+}
+
+);
+
+
+
+
+
+
+
+
+
+/*
+----------------------------------
+Graphs
+----------------------------------
+*/
+
+
+
+addChartToPDF(
+
+doc,
+
+"costChart",
+
+"Electricity Cost Comparison"
+
+);
+
+
+
+
+addChartToPDF(
+
+doc,
+
+"savingsChart",
+
+"25 Year Savings Projection"
+
+);
+
+
+
+
+addChartToPDF(
+
+doc,
+
+"energyChart",
+
+"Energy Independence"
+
+);
+
+
+
+
+
+
+
+
+
+/*
+----------------------------------
+Final page
+----------------------------------
+*/
+
+
+doc.addPage();
+
+
+
+doc.setFontSize(
+22
+);
+
+
+doc.text(
+
+"Next Steps",
+
+20,
+
+35
+
+);
+
+
+
+doc.setFontSize(
+13
+);
+
+
+
+doc.text(
+
+[
+
+"Your Solar Savings Assessment provides an initial estimate.",
+
+"",
+
+"Next steps:",
+
+"",
+
+"✓ Confirm energy usage",
+
+"✓ Final system design",
+
+"✓ Battery optimisation",
+
+"✓ Installation options"
+
+],
+
+20,
+
+65
+
+);
+
+
+
+
+
+
 doc.save(
 
-"Solar_Savings_Assessment_"
+"Solar_Savings_Assessment_" +
 
-+
-
-customer
+(customer.name || "Customer")
 
 +
 
 ".pdf"
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function addChartToPDF(
+
+doc,
+
+canvasID,
+
+title
+
+){
+
+
+
+const canvas =
+
+document.getElementById(
+canvasID
+);
+
+
+
+
+if(!canvas){
+
+return;
+
+}
+
+
+
+
+
+doc.addPage();
+
+
+
+doc.setFontSize(
+18
+);
+
+
+
+doc.text(
+
+title,
+
+20,
+
+30
+
+);
+
+
+
+
+const image =
+
+canvas.toDataURL(
+"image/png",
+1.0
+);
+
+
+
+
+
+doc.addImage(
+
+image,
+
+"PNG",
+
+20,
+
+45,
+
+170,
+
+100
 
 );
 
