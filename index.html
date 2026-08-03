@@ -2,10 +2,11 @@
 <html lang="en">
 
 <head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 <title>
 Solar Savings Assessment | Mark Fitzpatrick
@@ -15,7 +16,12 @@ Solar Savings Assessment | Mark Fitzpatrick
 <link rel="stylesheet" href="style.css">
 
 
+<!-- Chart Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- PDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
 </head>
@@ -35,18 +41,22 @@ Solar Savings Assessment
 
 
 <h2>
-Discover your potential solar savings
+Discover how much you could save with solar
 </h2>
 
 
 <p>
 Prepared by
 <br>
+
 <strong>
 Mark Fitzpatrick
 </strong>
+
 <br>
+
 Renewable Energy Specialist
+
 </p>
 
 
@@ -64,41 +74,47 @@ Renewable Energy Specialist
 
 
 
+
+
 <section class="card">
 
 
 <h2>
-1. Property Type
+Customer Details
 </h2>
 
 
-<div class="button-grid">
+<label>
+Postcode
+</label>
 
 
-<button onclick="selectProperty('Residential')">
-🏠 Residential
-</button>
+<input
+id="postcode"
+placeholder="Enter postcode">
 
 
-<button onclick="selectProperty('Business')">
-🏢 Business
-</button>
+
+<label>
+Do you own the property?
+</label>
 
 
-<button onclick="selectProperty('Commercial')">
-🏭 Commercial
-</button>
+<select id="ownership">
 
 
-<button onclick="selectProperty('Farming')">
-🚜 Farming
-</button>
+<option value="Owner">
+Yes - I own it
+</option>
 
 
-</div>
+<option value="Renter">
+No - I rent it
+</option>
 
 
-<input type="hidden" id="propertyType">
+</select>
+
 
 
 </section>
@@ -115,49 +131,114 @@ Renewable Energy Specialist
 
 
 <h2>
-2. Energy Usage
+1. Property Type
 </h2>
 
 
+
+<div class="button-grid">
+
+
+<button onclick="selectProperty('Residential')">
+
+🏠 Residential
+
+</button>
+
+
+<button onclick="selectProperty('Business')">
+
+🏢 Business
+
+</button>
+
+
+<button onclick="selectProperty('Commercial')">
+
+🏭 Commercial
+
+</button>
+
+
+<button onclick="selectProperty('Farming')">
+
+🚜 Farming
+
+</button>
+
+
+</div>
+
+
+
+<input 
+type="hidden"
+id="propertyType"
+value="Residential">
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="card">
+
+
+<h2>
+2. Electricity Usage
+</h2>
+
+
+
 <label>
-Average electricity bill
+Approximate electricity bill
 </label>
+
 
 
 <select id="energyBill">
 
 
 <option value="">
-Select approximate bill
+Select bill amount
 </option>
 
 
 <option value="200">
-$200/month
+$200 per month
 </option>
 
 
 <option value="400">
-$400/month
+$400 per month
 </option>
 
 
 <option value="600">
-$600/month
+$600 per month
 </option>
 
 
 <option value="800">
-$800/month
+$800 per month
 </option>
 
 
 <option value="1200">
-$1200+/month
+$1200+ per month
 </option>
 
 
 </select>
+
+
+
 
 
 
@@ -197,8 +278,9 @@ Quarterly
 
 
 <h2>
-3. Energy Requirements
+3. Energy Usage Profile
 </h2>
+
 
 
 
@@ -206,6 +288,7 @@ Quarterly
 
 
 <label>
+
 <input 
 type="checkbox"
 id="aircon">
@@ -216,7 +299,9 @@ Air Conditioning
 
 
 
+
 <label>
+
 <input 
 type="checkbox"
 id="ev">
@@ -229,18 +314,21 @@ Electric Vehicle
 
 
 <label>
+
 <input 
 type="checkbox"
 id="pool">
 
-Pool
+Swimming Pool
 
 </label>
 
 
 
 
+
 <label>
+
 <input 
 type="checkbox"
 id="pump">
@@ -251,7 +339,10 @@ Pumps / Irrigation
 
 
 
+
+
 <label>
+
 <input 
 type="checkbox"
 id="machinery">
@@ -279,37 +370,37 @@ Machinery / Equipment
 
 
 <h2>
-4. Battery Preference
+4. Battery Requirements
 </h2>
+
 
 
 <select id="batteryPreference">
 
 
 <option value="none">
-No Battery
+No battery initially
 </option>
 
 
 <option value="small">
-Small Battery
-(5-10kWh)
+Small battery (5-10kWh)
 </option>
 
 
 <option value="medium">
-Medium Battery
-(10-20kWh)
+Medium battery (10-20kWh)
 </option>
 
 
 <option value="large">
-Large Battery
-(20kWh+)
+Large battery (20kWh+)
 </option>
 
 
+
 </select>
+
 
 
 </section>
@@ -325,13 +416,14 @@ Large Battery
 <section class="center">
 
 
-<button 
+<button
 class="primary"
 onclick="calculateSolar()">
 
 Calculate My Solar Savings
 
 </button>
+
 
 
 </section>
@@ -344,7 +436,7 @@ Calculate My Solar Savings
 
 
 
-<section 
+<section
 id="resultsSection"
 class="card hidden">
 
@@ -358,7 +450,9 @@ Your Solar Recommendation
 <div class="results-grid">
 
 
+
 <div>
+
 <h3>
 Solar System
 </h3>
@@ -371,11 +465,11 @@ Solar System
 
 
 
+
 <div>
 
 <h3>
 Battery
-
 </h3>
 
 <p id="batteryResult">
@@ -387,11 +481,11 @@ Battery
 
 
 
+
 <div>
 
 <h3>
 Annual Savings
-
 </h3>
 
 <p id="savingsResult">
@@ -403,24 +497,23 @@ Annual Savings
 
 
 
+
 <div>
 
 <h3>
 Payback
-
 </h3>
 
 <p id="paybackResult">
 -
 </p>
 
-</div>
-
 
 </div>
 
 
 
+</div>
 
 
 </section>
@@ -433,7 +526,7 @@ Payback
 
 
 
-<section 
+<section
 id="chartsSection"
 class="card hidden">
 
@@ -441,7 +534,6 @@ class="card hidden">
 <h2>
 Energy Savings Analysis
 </h2>
-
 
 
 <canvas id="costChart"></canvas>
@@ -479,24 +571,29 @@ Receive Your Personal Solar Report
 
 
 <p>
-Enter your details and receive your assessment.
+Enter your details and receive your personalised assessment.
 </p>
 
 
 
-<input 
+
+<input
 id="leadName"
 placeholder="Your Name">
 
 
 
-<input 
+
+
+<input
 id="leadMobile"
 placeholder="Mobile Number">
 
 
 
-<input 
+
+
+<input
 id="leadEmail"
 placeholder="Email Address">
 
@@ -504,8 +601,10 @@ placeholder="Email Address">
 
 
 
+
 <button
 class="primary"
+id="sendReportButton"
 onclick="captureLead()">
 
 Send My Solar Report
@@ -513,8 +612,20 @@ Send My Solar Report
 </button>
 
 
+
 </section>
 
+
+
+
+
+
+<!-- Hidden photo used in PDF -->
+
+<img
+src="mark-photo.png"
+id="profilePhoto"
+style="display:none;">
 
 
 
@@ -534,7 +645,9 @@ Send My Solar Report
 
 <p>
 
+<strong>
 Mark Fitzpatrick
+</strong>
 
 <br>
 
@@ -565,15 +678,19 @@ ABN: 40 893 359 837
 
 
 
+<!-- Application Scripts -->
+
+
 <script src="config.js"></script>
 
 <script src="calculator.js"></script>
 
 <script src="charts.js"></script>
 
+<script src="pdf-generator.js"></script>
+
 <script src="lead-form.js"></script>
 
-<script src="pdf-generator.js"></script>
 
 
 </body>
