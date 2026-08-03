@@ -1,0 +1,582 @@
+/*
+==================================================
+Solar Savings Assessment Styling
+
+Prepared by:
+Mark Fitzpatrick
+Renewable Energy Specialist
+
+==================================================
+*/
+
+
+* {
+
+box-sizing:border-box;
+
+}
+
+
+
+body {
+
+margin:0;
+
+font-family:
+
+Arial,
+Helvetica,
+sans-serif;
+
+background:#f5f8fb;
+
+color:#222;
+
+line-height:1.6;
+
+}
+
+
+
+
+
+
+
+/* HEADER */
+
+.header {
+
+background:#005c97;
+
+color:white;
+
+padding:25px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+flex-wrap:wrap;
+
+}
+
+
+
+.brand h1 {
+
+margin:0;
+
+font-size:32px;
+
+}
+
+
+
+.brand p {
+
+margin-top:8px;
+
+font-size:16px;
+
+}
+
+
+
+.consultant {
+
+text-align:right;
+
+font-size:14px;
+
+}
+
+
+
+
+
+
+
+
+
+/* PROGRESS BAR */
+
+
+.progress-container {
+
+width:100%;
+
+height:8px;
+
+background:#ddd;
+
+}
+
+
+
+#progressBar {
+
+height:8px;
+
+width:14%;
+
+background:#28a745;
+
+transition:.5s;
+
+}
+
+
+
+
+
+
+
+
+
+/* MAIN CONTAINER */
+
+
+.container {
+
+max-width:1000px;
+
+margin:auto;
+
+padding:30px 20px;
+
+}
+
+
+
+
+
+
+
+
+.step {
+
+background:white;
+
+padding:35px;
+
+border-radius:15px;
+
+box-shadow:
+
+0 5px 20px rgba(0,0,0,.08);
+
+text-align:center;
+
+animation:
+
+fadeIn .4s ease;
+
+}
+
+
+
+.hidden {
+
+display:none;
+
+}
+
+
+
+
+
+
+
+
+h2 {
+
+color:#005c97;
+
+font-size:28px;
+
+}
+
+
+
+h3 {
+
+font-size:20px;
+
+}
+
+
+
+
+
+
+
+
+
+/* BUTTONS */
+
+
+.primary {
+
+background:#f5a623;
+
+border:none;
+
+padding:16px 35px;
+
+border-radius:30px;
+
+font-size:18px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+margin-top:25px;
+
+}
+
+
+
+.primary:hover {
+
+transform:translateY(-2px);
+
+}
+
+
+
+
+
+
+
+
+
+/* CARDS */
+
+
+.grid {
+
+display:grid;
+
+grid-template-columns:
+
+repeat(
+auto-fit,
+minmax(220px,1fr)
+);
+
+gap:20px;
+
+margin-top:25px;
+
+}
+
+
+
+.card {
+
+background:white;
+
+padding:25px;
+
+border-radius:15px;
+
+box-shadow:
+
+0 4px 15px rgba(0,0,0,.08);
+
+}
+
+
+
+.option {
+
+cursor:pointer;
+
+border:2px solid transparent;
+
+}
+
+
+
+.option:hover {
+
+border-color:#005c97;
+
+transform:translateY(-5px);
+
+}
+
+
+
+
+
+
+
+
+
+/* INPUTS */
+
+
+select,
+input {
+
+width:100%;
+
+padding:15px;
+
+border-radius:8px;
+
+border:1px solid #ccc;
+
+font-size:16px;
+
+margin-top:10px;
+
+}
+
+
+
+
+
+
+
+
+
+/* CHECKLIST */
+
+
+.checklist {
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+text-align:left;
+
+}
+
+
+
+.checklist label {
+
+font-size:18px;
+
+}
+
+
+
+
+
+
+
+
+
+/* RESULTS */
+
+
+.results-grid {
+
+display:grid;
+
+grid-template-columns:
+
+repeat(
+auto-fit,
+minmax(200px,1fr)
+);
+
+gap:20px;
+
+margin-top:30px;
+
+}
+
+
+
+.result-card {
+
+background:#f1f8ff;
+
+padding:25px;
+
+border-radius:15px;
+
+}
+
+
+
+.result-card p {
+
+font-size:20px;
+
+font-weight:bold;
+
+color:#005c97;
+
+}
+
+
+
+
+
+
+
+
+
+/* TRUST SECTION */
+
+
+.trust {
+
+background:white;
+
+text-align:center;
+
+padding:40px 20px;
+
+}
+
+
+
+.profile-photo {
+
+width:150px;
+
+height:150px;
+
+border-radius:50%;
+
+object-fit:cover;
+
+}
+
+
+
+
+
+
+
+
+
+/* FOOTER */
+
+
+footer {
+
+background:#005c97;
+
+color:white;
+
+text-align:center;
+
+padding:30px;
+
+}
+
+
+
+
+
+
+
+
+
+/* ANIMATION */
+
+
+@keyframes fadeIn {
+
+
+from {
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+
+to {
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+
+}
+
+
+
+
+
+
+
+
+
+/* MOBILE */
+
+
+@media(max-width:700px){
+
+
+
+.header {
+
+text-align:center;
+
+justify-content:center;
+
+}
+
+
+
+.consultant {
+
+text-align:center;
+
+margin-top:20px;
+
+}
+
+
+
+.brand h1 {
+
+font-size:25px;
+
+}
+
+
+
+.step {
+
+padding:25px 15px;
+
+}
+
+
+
+h2 {
+
+font-size:23px;
+
+}
+
+
+
+.primary {
+
+width:100%;
+
+}
+
+
+
+}

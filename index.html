@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+Solar Savings Assessment | Mark Fitzpatrick
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+
+<div class="brand">
+
+<h1>
+Solar Savings Assessment
+</h1>
+
+<p>
+Discover your solar savings potential in less than 60 seconds
+</p>
+
+</div>
+
+
+
+<div class="consultant">
+
+<strong>
+Mark Fitzpatrick
+</strong>
+
+<br>
+
+Renewable Energy Specialist
+
+<br>
+
+M: 0434 151 237
+
+</div>
+
+
+</header>
+
+
+
+
+
+
+
+
+<div class="progress-container">
+
+<div id="progressBar"></div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<section class="container">
+
+
+
+<!-- WELCOME -->
+
+
+<div class="step" id="step1">
+
+
+<h2>
+Find Out How Much You Could Save With Solar
+</h2>
+
+
+
+<p>
+
+Complete this free assessment to discover:
+
+</p>
+
+
+
+<ul>
+
+<li>☀️ Recommended solar system size</li>
+
+<li>🔋 Battery storage options</li>
+
+<li>💰 Estimated annual savings</li>
+
+<li>📈 Long-term energy benefits</li>
+
+</ul>
+
+
+
+<p>
+
+Takes less than 60 seconds.
+
+</p>
+
+
+
+
+<button
+class="primary"
+onclick="nextStep(2)">
+
+Start My Free Assessment
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- PROPERTY TYPE -->
+
+
+<div class="step hidden" id="step2">
+
+
+<h2>
+Step 1 of 4
+</h2>
+
+
+<h3>
+What type of property are you assessing?
+</h3>
+
+
+
+
+
+<div class="grid">
+
+
+
+<div class="card option"
+onclick="selectProperty('Residential');nextStep(3)">
+
+<h3>
+🏠 Residential
+</h3>
+
+<p>
+Homeowners and families
+</p>
+
+</div>
+
+
+
+
+<div class="card option"
+onclick="selectProperty('Business');nextStep(3)">
+
+<h3>
+🏢 Business
+</h3>
+
+<p>
+Offices, shops and workplaces
+</p>
+
+</div>
+
+
+
+
+
+<div class="card option"
+onclick="selectProperty('Commercial');nextStep(3)">
+
+<h3>
+🏭 Commercial
+</h3>
+
+<p>
+Factories, warehouses and large sites
+</p>
+
+</div>
+
+
+
+
+
+<div class="card option"
+onclick="selectProperty('Farming');nextStep(3)">
+
+<h3>
+🚜 Farming
+</h3>
+
+<p>
+Agriculture and rural properties
+</p>
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ELECTRICITY BILL -->
+
+
+<div class="step hidden" id="step3">
+
+
+<h2>
+Step 2 of 4
+</h2>
+
+
+<h3>
+Approximately how much is your electricity bill?
+</h3>
+
+
+
+
+<div class="card">
+
+
+<select id="billAmount">
+
+
+<option value="">
+Select monthly electricity cost
+</option>
+
+
+<option value="150">
+$100 - $200/month
+</option>
+
+
+<option value="300">
+$200 - $400/month
+</option>
+
+
+<option value="600">
+$400 - $800/month
+</option>
+
+
+<option value="1000">
+$800 - $1,500/month
+</option>
+
+
+<option value="2000">
+$1,500 - $3,000/month
+</option>
+
+
+<option value="4000">
+$3,000+/month
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+<button
+class="primary"
+onclick="nextStep(4)">
+
+Continue
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ENERGY PROFILE -->
+
+
+<div class="step hidden" id="step4">
+
+
+<h2>
+Step 3 of 4
+</h2>
+
+
+<h3>
+What energy systems do you have?
+</h3>
+
+
+
+<div class="card checklist">
+
+
+<label>
+<input type="checkbox">
+Air conditioning
+</label>
+
+
+<label>
+<input type="checkbox">
+Pool
+</label>
+
+
+<label>
+<input type="checkbox">
+Electric hot water
+</label>
+
+
+<label>
+<input type="checkbox">
+EV charger
+</label>
+
+
+<label>
+<input type="checkbox">
+Refrigeration
+</label>
+
+
+<label>
+<input type="checkbox">
+Pumps / irrigation
+</label>
+
+
+<label>
+<input type="checkbox">
+Machinery
+</label>
+
+
+</div>
+
+
+
+
+
+<button
+class="primary"
+onclick="nextStep(5)">
+
+Continue
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- BATTERY -->
+
+
+<div class="step hidden" id="step5">
+
+
+<h2>
+Step 4 of 4
+</h2>
+
+
+<h3>
+Are you interested in battery storage?
+</h3>
+
+
+
+
+<div class="grid">
+
+
+<div class="card option"
+onclick="selectBattery('Yes');calculateSolar();nextStep(6)">
+
+🔋 Yes - maximise savings
+
+</div>
+
+
+
+<div class="card option"
+onclick="selectBattery('Maybe');calculateSolar();nextStep(6)">
+
+🔋 Show me options
+
+</div>
+
+
+
+<div class="card option"
+onclick="selectBattery('No');calculateSolar();nextStep(6)">
+
+☀️ Solar only
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- RESULTS -->
+
+
+<div class="step hidden" id="step6">
+
+
+<h2>
+Your Solar Opportunity
+</h2>
+
+
+
+
+<div class="results-grid">
+
+
+<div class="result-card">
+
+<h3>
+Property
+</h3>
+
+<p id="resultProperty">
+-
+</p>
+
+</div>
+
+
+
+
+<div class="result-card">
+
+<h3>
+Recommended Solar
+</h3>
+
+<p id="solarRecommendation">
+-
+</p>
+
+</div>
+
+
+
+
+<div class="result-card">
+
+<h3>
+Battery Option
+</h3>
+
+<p id="batteryRecommendation">
+-
+</p>
+
+</div>
+
+
+
+
+<div class="result-card">
+
+<h3>
+Estimated Savings
+</h3>
+
+<p id="estimatedSavings">
+-
+</p>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<p>
+
+This is an initial estimate based on your energy costs.
+A detailed assessment confirms the final design.
+
+</p>
+
+
+
+
+<button
+class="primary"
+onclick="nextStep(7)">
+
+Get My Personal Report
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- LEAD CAPTURE -->
+
+
+<div class="step hidden" id="step7">
+
+
+<h2>
+Where should we send your report?
+</h2>
+
+
+
+
+<div class="card">
+
+
+<label>
+Name
+</label>
+
+<input id="leadName">
+
+
+
+<label>
+Mobile
+</label>
+
+<input id="leadMobile">
+
+
+
+<label>
+Email
+</label>
+
+<input id="leadEmail">
+
+
+
+</div>
+
+
+
+
+<button
+class="primary"
+onclick="captureLead()">
+
+Send My Solar Report
+
+</button>
+
+
+</div>
+
+
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="trust">
+
+
+<img
+src="mark-photo.png"
+class="profile-photo">
+
+
+
+<h2>
+Prepared By
+</h2>
+
+
+<h3>
+Mark Fitzpatrick
+</h3>
+
+
+<p>
+Renewable Energy Specialist
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<footer>
+
+Solar Savings Assessment
+
+<br><br>
+
+Prepared by Mark Fitzpatrick
+
+<br>
+
+Renewable Energy Specialist
+
+<br><br>
+
+M: 0434 151 237
+
+<br>
+
+mark.fitzpatrick@classaenergy.com.au
+
+</footer>
+
+
+
+
+
+
+
+<script src="calculator.js"></script>
+
+<script src="charts.js"></script>
+
+<script src="lead-form.js"></script>
+
+<script src="pdf-generator.js"></script>
+
+
+</body>
+
+
+</html>
