@@ -15,7 +15,7 @@ Google Sheets Integration
 
 const GOOGLE_SCRIPT_URL =
 
-"https://script.google.com/macros/s/AKfycbyrBLY5ggnS5tMEC9598ulwna1Nu37jC2KVA7quxiBN3kfHBeSZlav4VEjHXYYS4ED2/exec";
+"https://script.google.com/macros/s/AKfycbxAuMeIm7Z5-_0fOpj2Cn3dTeYFi61YpLhuOFrqsmbJeeBByzF-YRd2OsZLnAmvNh4b/exec";
 
 
 
