@@ -3,38 +3,75 @@
 Solar Savings Assessment
 Lead Capture System
 
+Prepared by:
 Mark Fitzpatrick
 Renewable Energy Specialist
+
+Google Sheets Integration
 
 ==================================================
 */
 
 
 const GOOGLE_SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbzshCCI99nyGWmAhca3oEsk1gNQTXmbqyF5Pi8KMxqTYWmzVLA8wCVTtkiVs4stN0uR/exec";
+
+"https://script.google.com/macros/s/AKfycbyrBLY5ggnS5tMEC9598ulwna1Nu37jC2KVA7quxiBN3kfHBeSZlav4VEjHXYYS4ED2/exec";
+
+
+
+
+
 
 
 
 function captureLead(){
 
 
-console.log("captureLead started");
+
+console.log(
+"Lead capture started"
+);
+
+
+
+
 
 
 const name =
-document.getElementById("leadName").value;
+
+document.getElementById(
+"leadName"
+).value.trim();
+
+
 
 
 const mobile =
-document.getElementById("leadMobile").value;
+
+document.getElementById(
+"leadMobile"
+).value.trim();
+
+
 
 
 const email =
-document.getElementById("leadEmail").value;
+
+document.getElementById(
+"leadEmail"
+).value.trim();
 
 
 
-if(!name || !mobile || !email){
+
+
+
+
+if(
+!name ||
+!mobile ||
+!email
+){
 
 
 alert(
@@ -44,38 +81,43 @@ alert(
 
 return;
 
+
 }
 
 
 
 
-let assessment = window.assessmentResults;
+
+
+
+
+const assessment =
+
+window.assessmentResults;
+
+
+
+
+
 
 
 
 if(!assessment){
 
 
-assessment = {
+alert(
+"Please complete the Solar Savings Assessment first."
+);
 
 
-property:"Residential",
-
-annualBill:"",
-
-solarSize:"",
-
-battery:"",
-
-estimatedSavings:"",
-
-payback:""
-
-
-};
+return;
 
 
 }
+
+
+
+
 
 
 
@@ -84,41 +126,63 @@ payback:""
 const lead = {
 
 
+
 date:
-new Date().toLocaleString("en-AU"),
+
+new Date()
+
+.toLocaleString(
+"en-AU"
+),
+
 
 
 name:name,
 
 
+
 mobile:mobile,
+
 
 
 email:email,
 
 
+
 property:
+
 assessment.property,
 
 
+
 annualBill:
+
 assessment.annualBill,
 
 
+
 solar:
+
 assessment.solarSize,
 
 
+
 battery:
+
 assessment.battery,
 
 
+
 savings:
+
 assessment.estimatedSavings,
 
 
+
 payback:
+
 assessment.payback
+
 
 
 };
@@ -127,7 +191,12 @@ assessment.payback
 
 
 
+
+
+
+
 console.log(
+"Lead Data:",
 lead
 );
 
@@ -135,11 +204,20 @@ lead
 
 
 
+
+
+
+
+// Save backup locally
+
+
 localStorage.setItem(
 
 "solarLead",
 
-JSON.stringify(lead)
+JSON.stringify(
+lead
+)
 
 );
 
@@ -147,6 +225,17 @@ JSON.stringify(lead)
 
 
 
+
+
+
+
+
+
+/*
+----------------------------------
+Send to Google Apps Script
+----------------------------------
+*/
 
 
 fetch(
@@ -156,48 +245,73 @@ GOOGLE_SCRIPT_URL,
 {
 
 
-method:"POST",
+method:
+
+"POST",
 
 
-mode:"no-cors",
+mode:
+
+"no-cors",
+
 
 
 headers:{
 
 
-"Content-Type":"application/json"
+"Content-Type":
+
+"application/json"
+
 
 },
 
 
+
 body:
 
-JSON.stringify(lead)
+JSON.stringify(
+lead
+)
+
+
+
+}
+
+
+)
+
+.then(
+
+function(){
+
+
+console.log(
+"Lead submitted successfully"
+);
 
 
 }
 
 )
 
-.then(function(){
+.catch(
 
-
-console.log(
-"Lead submitted"
-);
-
-
-})
-
-.catch(function(error){
+function(error){
 
 
 console.error(
+"Lead submission error:",
 error
 );
 
 
-});
+}
+
+);
+
+
+
 
 
 
@@ -206,11 +320,11 @@ error
 
 alert(
 
-"Thank you " 
-+
-name
-+
-". Your Solar Savings Assessment is being prepared."
+"Thank you " +
+
+name +
+
+". Your Solar Savings Assessment report is being prepared."
 
 );
 
@@ -218,13 +332,72 @@ name
 
 
 
-if(typeof generateProposal === "function"){
+
+
+
+
+
+
+/*
+----------------------------------
+Generate PDF
+----------------------------------
+*/
+
+
+setTimeout(
+
+function(){
+
+
+
+if(
+typeof generateProposal === "function"
+){
 
 
 generateProposal();
 
 
 }
+
+
+
+},
+
+1500
+
+);
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+function getLeadData(){
+
+
+
+return JSON.parse(
+
+localStorage.getItem(
+"solarLead"
+)
+
+)
+
+||
+
+{};
 
 
 
