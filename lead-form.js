@@ -24,12 +24,23 @@ const GOOGLE_SCRIPT_URL =
 
 
 
+
 function captureLead(){
 
 
 
 console.log(
-"Lead capture started"
+"Capture lead started"
+);
+
+
+
+
+
+const button =
+
+document.getElementById(
+"sendReportButton"
 );
 
 
@@ -41,7 +52,10 @@ const name =
 
 document.getElementById(
 "leadName"
-).value.trim();
+)
+.value
+.trim();
+
 
 
 
@@ -50,7 +64,10 @@ const mobile =
 
 document.getElementById(
 "leadMobile"
-).value.trim();
+)
+.value
+.trim();
+
 
 
 
@@ -59,8 +76,9 @@ const email =
 
 document.getElementById(
 "leadEmail"
-).value.trim();
-
+)
+.value
+.trim();
 
 
 
@@ -91,11 +109,10 @@ return;
 
 
 
+
 const assessment =
 
 window.assessmentResults;
-
-
 
 
 
@@ -111,6 +128,27 @@ alert(
 
 
 return;
+
+
+}
+
+
+
+
+
+
+
+
+
+if(button){
+
+
+button.innerHTML =
+
+"Preparing Your Report...";
+
+
+button.disabled = true;
 
 
 }
@@ -146,6 +184,22 @@ mobile:mobile,
 
 
 email:email,
+
+
+
+postcode:
+
+document.getElementById(
+"postcode"
+)?.value || "",
+
+
+
+ownership:
+
+document.getElementById(
+"ownership"
+)?.value || "",
 
 
 
@@ -196,7 +250,7 @@ assessment.payback
 
 
 console.log(
-"Lead Data:",
+"Lead:",
 lead
 );
 
@@ -208,12 +262,12 @@ lead
 
 
 
-// Save backup locally
+// Local backup
 
 
 localStorage.setItem(
 
-"solarLead",
+"solarAssessmentLead",
 
 JSON.stringify(
 lead
@@ -229,13 +283,7 @@ lead
 
 
 
-
-
-/*
-----------------------------------
-Send to Google Apps Script
-----------------------------------
-*/
+// Send to Google Sheets
 
 
 fetch(
@@ -245,14 +293,10 @@ GOOGLE_SCRIPT_URL,
 {
 
 
-method:
-
-"POST",
+method:"POST",
 
 
-mode:
-
-"no-cors",
+mode:"no-cors",
 
 
 
@@ -287,7 +331,7 @@ function(){
 
 
 console.log(
-"Lead submitted successfully"
+"Lead sent"
 );
 
 
@@ -301,7 +345,7 @@ function(error){
 
 
 console.error(
-"Lead submission error:",
+"Lead error:",
 error
 );
 
@@ -338,13 +382,6 @@ name +
 
 
 
-/*
-----------------------------------
-Generate PDF
-----------------------------------
-*/
-
-
 setTimeout(
 
 function(){
@@ -352,11 +389,39 @@ function(){
 
 
 if(
+
 typeof generateProposal === "function"
+
 ){
 
 
 generateProposal();
+
+
+}
+
+else{
+
+
+console.error(
+"PDF generator not loaded"
+);
+
+
+}
+
+
+
+
+if(button){
+
+
+button.innerHTML =
+
+"Send My Solar Report";
+
+
+button.disabled = false;
 
 
 }
@@ -390,7 +455,7 @@ function getLeadData(){
 return JSON.parse(
 
 localStorage.getItem(
-"solarLead"
+"solarAssessmentLead"
 )
 
 )
