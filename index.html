@@ -1,698 +1,259 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="en-AU">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<title>
-Solar Savings Assessment | Mark Fitzpatrick
-</title>
-
-
-<link rel="stylesheet" href="style.css">
-
-
-<!-- Chart Library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-<!-- PDF Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Estimate solar and battery savings for an Australian home, business, commercial property or farm.">
+  <meta name="theme-color" content="#062f3f">
+  <title>Solar Savings Calculator | Mark Fitzpatrick</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="vendor/chart.umd.min.js"></script>
+  <script defer src="vendor/jspdf.umd.min.js"></script>
+  <script defer src="app.js"></script>
 </head>
-
-
 <body>
-
-
-<header class="hero">
-
-<div class="container">
-
-
-<h1>
-Solar Savings Assessment
-</h1>
-
-
-<h2>
-Discover how much you could save with solar
-</h2>
-
-
-<p>
-Prepared by
-<br>
-
-<strong>
-Mark Fitzpatrick
-</strong>
-
-<br>
-
-Renewable Energy Specialist
-
-</p>
-
-
-</div>
-
-</header>
-
-
-
-
-
-<main class="container">
-
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-Customer Details
-</h2>
-
-
-<label>
-Postcode
-</label>
-
-
-<input
-id="postcode"
-placeholder="Enter postcode">
-
-
-
-<label>
-Do you own the property?
-</label>
-
-
-<select id="ownership">
-
-
-<option value="Owner">
-Yes - I own it
-</option>
-
-
-<option value="Renter">
-No - I rent it
-</option>
-
-
-</select>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-1. Property Type
-</h2>
-
-
-
-<div class="button-grid">
-
-
-<button onclick="selectProperty('Residential')">
-
-🏠 Residential
-
-</button>
-
-
-<button onclick="selectProperty('Business')">
-
-🏢 Business
-
-</button>
-
-
-<button onclick="selectProperty('Commercial')">
-
-🏭 Commercial
-
-</button>
-
-
-<button onclick="selectProperty('Farming')">
-
-🚜 Farming
-
-</button>
-
-
-</div>
-
-
-
-<input 
-type="hidden"
-id="propertyType"
-value="Residential">
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-2. Electricity Usage
-</h2>
-
-
-
-<label>
-Approximate electricity bill
-</label>
-
-
-
-<select id="energyBill">
-
-
-<option value="">
-Select bill amount
-</option>
-
-
-<option value="200">
-$200 per month
-</option>
-
-
-<option value="400">
-$400 per month
-</option>
-
-
-<option value="600">
-$600 per month
-</option>
-
-
-<option value="800">
-$800 per month
-</option>
-
-
-<option value="1200">
-$1200+ per month
-</option>
-
-
-</select>
-
-
-
-
-
-
-<label>
-Billing period
-</label>
-
-
-<select id="billingPeriod">
-
-
-<option value="monthly">
-Monthly
-</option>
-
-
-<option value="quarterly">
-Quarterly
-</option>
-
-
-</select>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-3. Energy Usage Profile
-</h2>
-
-
-
-
-<div class="checkbox-grid">
-
-
-<label>
-
-<input 
-type="checkbox"
-id="aircon">
-
-Air Conditioning
-
-</label>
-
-
-
-
-<label>
-
-<input 
-type="checkbox"
-id="ev">
-
-Electric Vehicle
-
-</label>
-
-
-
-
-<label>
-
-<input 
-type="checkbox"
-id="pool">
-
-Swimming Pool
-
-</label>
-
-
-
-
-
-<label>
-
-<input 
-type="checkbox"
-id="pump">
-
-Pumps / Irrigation
-
-</label>
-
-
-
-
-
-<label>
-
-<input 
-type="checkbox"
-id="machinery">
-
-Machinery / Equipment
-
-</label>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-4. Battery Requirements
-</h2>
-
-
-
-<select id="batteryPreference">
-
-
-<option value="none">
-No battery initially
-</option>
-
-
-<option value="small">
-Small battery (5-10kWh)
-</option>
-
-
-<option value="medium">
-Medium battery (10-20kWh)
-</option>
-
-
-<option value="large">
-Large battery (20kWh+)
-</option>
-
-
-
-</select>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="center">
-
-
-<button
-class="primary"
-onclick="calculateSolar()">
-
-Calculate My Solar Savings
-
-</button>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section
-id="resultsSection"
-class="card hidden">
-
-
-<h2>
-Your Solar Recommendation
-</h2>
-
-
-
-<div class="results-grid">
-
-
-
-<div>
-
-<h3>
-Solar System
-</h3>
-
-<p id="solarResult">
--
-</p>
-
-</div>
-
-
-
-
-<div>
-
-<h3>
-Battery
-</h3>
-
-<p id="batteryResult">
--
-</p>
-
-</div>
-
-
-
-
-
-<div>
-
-<h3>
-Annual Savings
-</h3>
-
-<p id="savingsResult">
--
-</p>
-
-</div>
-
-
-
-
-
-<div>
-
-<h3>
-Payback
-</h3>
-
-<p id="paybackResult">
--
-</p>
-
-
-</div>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section
-id="chartsSection"
-class="card hidden">
-
-
-<h2>
-Energy Savings Analysis
-</h2>
-
-
-<canvas id="costChart"></canvas>
-
-
-<br><br>
-
-
-<canvas id="savingsChart"></canvas>
-
-
-<br><br>
-
-
-<canvas id="energyChart"></canvas>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="card">
-
-
-<h2>
-Receive Your Personal Solar Report
-</h2>
-
-
-<p>
-Enter your details and receive your personalised assessment.
-</p>
-
-
-
-
-<input
-id="leadName"
-placeholder="Your Name">
-
-
-
-
-
-<input
-id="leadMobile"
-placeholder="Mobile Number">
-
-
-
-
-
-<input
-id="leadEmail"
-placeholder="Email Address">
-
-
-
-
-
-
-<button
-class="primary"
-id="sendReportButton"
-onclick="captureLead()">
-
-Send My Solar Report
-
-</button>
-
-
-
-</section>
-
-
-
-
-
-
-<!-- Hidden photo used in PDF -->
-
-<img
-src="mark-photo.png"
-id="profilePhoto"
-style="display:none;">
-
-
-
-
-
-
-</main>
-
-
-
-
-
-
-
-<footer>
-
-
-<p>
-
-<strong>
-Mark Fitzpatrick
-</strong>
-
-<br>
-
-Renewable Energy Specialist
-
-<br>
-
-M: 0434 151 237
-
-<br>
-
-mark.fitzpatrick@classaenergy.com.au
-
-<br>
-
-ABN: 40 893 359 837
-
-</p>
-
-
-</footer>
-
-
-
-
-
-
-
-
-
-<!-- Application Scripts -->
-
-
-<script src="config.js"></script>
-
-<script src="calculator.js"></script>
-
-<script src="charts.js"></script>
-
-<script src="pdf-generator.js"></script>
-
-<script src="lead-form.js"></script>
-
-
-
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Solar Savings Calculator home">
+      <span class="brand-mark" aria-hidden="true"><span></span></span>
+      <span><strong>Solar Savings</strong><small>with Mark Fitzpatrick</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#calculator">Calculator</a>
+      <a href="#how-it-works">How it works</a>
+      <a class="header-call" href="tel:0434151237">Call 0434 151 237</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Free Australian solar assessment</p>
+        <h1>See what solar could do for your <em>next power bill.</em></h1>
+        <p class="hero-lead">Compare grid only, solar only, and solar with battery storage. Get a clear estimate in about two minutes.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#calculator">Calculate my savings <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="tel:0434151237">Talk with Mark</a>
+        </div>
+        <ul class="trust-list" aria-label="Calculator benefits">
+          <li>No cost</li><li>No obligation</li><li>Plain-English results</li>
+        </ul>
+      </div>
+      <div class="hero-visual" aria-label="Example annual energy savings">
+        <div class="sun-orbit"><span></span></div>
+        <div class="hero-card hero-card-main">
+          <span class="card-label">Your energy opportunity</span>
+          <strong>3 scenarios</strong>
+          <p>Grid · Solar · Battery</p>
+          <div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="hero-card hero-card-small"><span>25-year view</span><strong>Built in</strong></div>
+        <div class="hero-card hero-card-saving"><span>Designed for</span><strong>Homes + business</strong></div>
+      </div>
+    </section>
+
+    <section class="proof-strip" aria-label="Assessment features">
+      <div><strong>01</strong><span>Tailored system estimate</span></div>
+      <div><strong>02</strong><span>Three cost scenarios</span></div>
+      <div><strong>03</strong><span>PDF savings report</span></div>
+      <div><strong>04</strong><span>Optional phone booking</span></div>
+    </section>
+
+    <section class="calculator-section" id="calculator">
+      <div class="section-heading">
+        <div><p class="eyebrow">Your free assessment</p><h2>Let’s build your energy picture.</h2></div>
+        <p>Use a recent bill if you have one. Every figure can be adjusted before you download your report.</p>
+      </div>
+
+      <div class="calculator-shell">
+        <aside class="steps-panel">
+          <p class="steps-kicker">Assessment progress</p>
+          <ol id="stepIndicator">
+            <li class="active" data-step="1"><span>1</span><div><strong>Your property</strong><small>Site and main goal</small></div></li>
+            <li data-step="2"><span>2</span><div><strong>Your energy</strong><small>Bill and usage</small></div></li>
+            <li data-step="3"><span>3</span><div><strong>Your preferences</strong><small>Solar and battery</small></div></li>
+            <li data-step="4"><span>4</span><div><strong>Your results</strong><small>Three scenarios</small></div></li>
+            <li data-step="5"><span>5</span><div><strong>Your report</strong><small>PDF and phone call</small></div></li>
+          </ol>
+          <div class="advisor-mini">
+            <img src="mark-photo.jpg" alt="Mark Fitzpatrick">
+            <div><span>Questions?</span><strong>Talk with Mark</strong><a href="tel:0434151237">0434 151 237</a></div>
+          </div>
+        </aside>
+
+        <div class="wizard-panel">
+          <div class="mobile-progress"><span id="mobileStep">Step 1 of 5</span><div><i id="progressBar"></i></div></div>
+
+          <form id="calculatorForm" novalidate>
+            <section class="wizard-step active" data-step="1">
+              <p class="step-label">Step 1</p>
+              <h3>What type of property are we assessing?</h3>
+              <p class="step-intro">Choose the closest match. You can refine the details later.</p>
+              <div class="option-grid property-grid" role="radiogroup" aria-label="Property type">
+                <label class="choice-card"><input type="radio" name="property" value="home"><span class="choice-icon">⌂</span><strong>Home</strong><small>House or townhouse</small></label>
+                <label class="choice-card"><input type="radio" name="property" value="business"><span class="choice-icon">▦</span><strong>Business</strong><small>Office, shop or workshop</small></label>
+                <label class="choice-card"><input type="radio" name="property" value="commercial"><span class="choice-icon">▥</span><strong>Commercial</strong><small>Factory or warehouse</small></label>
+                <label class="choice-card"><input type="radio" name="property" value="farm"><span class="choice-icon">⌁</span><strong>Farm</strong><small>Rural or agricultural site</small></label>
+              </div>
+              <h4>What matters most to you?</h4>
+              <div class="option-grid goal-grid" role="radiogroup" aria-label="Main energy goal">
+                <label class="choice-line"><input type="radio" name="goal" value="bills"><span><strong>Lower my bills</strong><small>Reduce ongoing energy costs</small></span></label>
+                <label class="choice-line"><input type="radio" name="goal" value="battery"><span><strong>Add battery storage</strong><small>Use more solar after sunset</small></span></label>
+                <label class="choice-line"><input type="radio" name="goal" value="independence"><span><strong>More energy independence</strong><small>Rely less on the grid</small></span></label>
+              </div>
+              <p class="form-error" id="step1Error" role="alert"></p>
+              <div class="wizard-actions end"><button class="button button-primary" type="button" data-next="2">Continue <span>→</span></button></div>
+            </section>
+
+            <section class="wizard-step" data-step="2">
+              <p class="step-label">Step 2</p>
+              <h3>Tell us about your electricity use.</h3>
+              <p class="step-intro">An estimate is fine. A current bill will give the most useful result.</p>
+              <div class="field-grid">
+                <label class="field"><span>Electricity bill</span><div class="money-input"><b>$</b><input id="billAmount" type="number" inputmode="decimal" min="1" step="1" placeholder="650" required></div></label>
+                <label class="field"><span>Bill frequency</span><select id="billFrequency"><option value="monthly">Per month</option><option value="quarterly" selected>Per quarter</option><option value="annual">Per year</option></select></label>
+                <label class="field"><span>Property postcode</span><input id="postcode" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="3000" required></label>
+                <label class="field"><span>Power used during daylight</span><select id="dayUse"><option value="30">About 30%</option><option value="45">About 45%</option><option value="60" selected>About 60%</option><option value="75">About 75%</option><option value="90">About 90%</option></select></label>
+              </div>
+              <div class="range-card">
+                <div><strong>Not sure about daytime use?</strong><p>Homes are often 30–45%. Businesses operating through the day are often 60–90%.</p></div>
+              </div>
+              <p class="form-error" id="step2Error" role="alert"></p>
+              <div class="wizard-actions"><button class="button button-quiet" type="button" data-back="1">Back</button><button class="button button-primary" type="button" data-next="3">Continue <span>→</span></button></div>
+            </section>
+
+            <section class="wizard-step" data-step="3">
+              <p class="step-label">Step 3</p>
+              <h3>Shape the system around your needs.</h3>
+              <p class="step-intro">These choices change the solar and battery recommendation.</p>
+              <h4>Do you already have solar?</h4>
+              <div class="segmented" role="radiogroup" aria-label="Existing solar">
+                <label><input type="radio" name="existingSolar" value="no" checked><span>No</span></label>
+                <label><input type="radio" name="existingSolar" value="yes"><span>Yes</span></label>
+                <label><input type="radio" name="existingSolar" value="unsure"><span>Not sure</span></label>
+              </div>
+              <label class="field existing-size hidden" id="existingSizeWrap"><span>Current solar system size (kW)</span><input id="existingSize" type="number" min="1" max="500" step="0.1" placeholder="6.6"></label>
+              <h4>How interested are you in a battery?</h4>
+              <div class="option-grid battery-grid" role="radiogroup" aria-label="Battery interest">
+                <label class="choice-line"><input type="radio" name="battery" value="yes"><span><strong>Yes</strong><small>Include a battery recommendation</small></span></label>
+                <label class="choice-line"><input type="radio" name="battery" value="maybe" checked><span><strong>Show me</strong><small>Compare solar with and without one</small></span></label>
+                <label class="choice-line"><input type="radio" name="battery" value="no"><span><strong>Solar only</strong><small>Still show the battery comparison</small></span></label>
+              </div>
+              <details class="assumptions">
+                <summary>Adjust calculator assumptions</summary>
+                <div class="field-grid assumptions-grid">
+                  <label class="field"><span>Usage tariff ($/kWh)</span><input id="usageRate" type="number" min="0.05" max="1.5" step="0.01" value="0.35"></label>
+                  <label class="field"><span>Feed-in tariff ($/kWh)</span><input id="feedInRate" type="number" min="0" max="0.5" step="0.001" value="0.05"></label>
+                  <label class="field"><span>Daily supply charge ($)</span><input id="supplyCharge" type="number" min="0" max="20" step="0.1" value="1.20"></label>
+                  <label class="field"><span>Solar yield (kWh/kW/day)</span><input id="solarYield" type="number" min="2" max="7" step="0.1" value="4.0"></label>
+                  <label class="field"><span>Annual price rise</span><div class="suffix-input"><input id="priceRise" type="number" min="0" max="12" step="0.1" value="2.5"><b>%</b></div></label>
+                </div>
+              </details>
+              <div class="wizard-actions"><button class="button button-quiet" type="button" data-back="2">Back</button><button class="button button-primary" id="calculateButton" type="button">Calculate my savings <span>→</span></button></div>
+            </section>
+
+            <section class="wizard-step results-step" data-step="4">
+              <div class="results-title-row"><div><p class="step-label">Your initial estimate</p><h3>Your solar opportunity.</h3></div><button class="button button-quiet edit-button" type="button" data-back="3">Edit inputs</button></div>
+              <div class="recommendation-banner"><div><span>Recommended starting point</span><strong id="recommendedSystem">—</strong><p id="recommendationReason">—</p></div><div class="recommendation-battery"><span>Battery comparison</span><strong id="recommendedBattery">—</strong></div></div>
+              <div class="kpi-grid">
+                <article><span>Estimated annual savings</span><strong id="annualSavings">—</strong><small>Solar + battery</small></article>
+                <article><span>Estimated payback</span><strong id="paybackPeriod">—</strong><small>Solar + battery</small></article>
+                <article><span>10-year net benefit</span><strong id="tenYearBenefit">—</strong><small>After estimated system cost</small></article>
+                <article><span>25-year net benefit</span><strong id="twentyFiveYearBenefit">—</strong><small>After estimated system cost</small></article>
+              </div>
+
+              <div class="scenario-block">
+                <div class="block-heading"><div><span>Scenario comparison</span><h4>Three paths. One clear view.</h4></div><p>Costs include the selected supply charge and projected energy price rises.</p></div>
+                <div class="scenario-visuals">
+                  <article class="scenario-visual grid-visual"><div><span>Grid only</span><strong id="gridVisualCost">—</strong><small>current annual bill</small></div><i style="--saving:0%"></i></article>
+                  <article class="scenario-visual solar-visual"><div><span>Solar only</span><strong id="solarVisualSaving">—</strong><small id="solarVisualRate">annual saving</small></div><i id="solarSavingBar"></i></article>
+                  <article class="scenario-visual battery-visual"><b>Best bill reduction</b><div><span>Solar + battery</span><strong id="batteryVisualSaving">—</strong><small id="batteryVisualRate">annual saving</small></div><i id="batterySavingBar"></i></article>
+                </div>
+                <div class="table-wrap"><table>
+                  <thead><tr><th>Scenario</th><th>Year 1 cost</th><th>Annual saving</th><th>10-year net benefit</th><th>25-year net benefit</th><th>Grid imports</th></tr></thead>
+                  <tbody>
+                    <tr><th><span class="scenario-dot grid-dot"></span>Grid only</th><td id="gridAnnual">—</td><td>—</td><td>—</td><td>—</td><td id="gridImports">—</td></tr>
+                    <tr><th><span class="scenario-dot solar-dot"></span>Solar only</th><td id="solarAnnual">—</td><td id="solarAnnualSaving">—</td><td id="solarBenefit10">—</td><td id="solarBenefit25">—</td><td id="solarImports">—</td></tr>
+                    <tr class="recommended-row"><th><span class="scenario-dot battery-dot"></span>Solar + battery <b>Recommended</b></th><td id="batteryAnnual">—</td><td id="batteryAnnualSaving">—</td><td id="batteryBenefit10">—</td><td id="batteryBenefit25">—</td><td id="batteryImports">—</td></tr>
+                  </tbody>
+                </table></div>
+              </div>
+
+              <div class="chart-grid">
+                <article class="chart-card chart-feature"><div><span>Your bill, re-shaped</span><h4>Current bill vs estimated savings</h4><p>The coloured section is the bill amount the system could avoid in year one.</p></div><canvas id="billSavingsChart" aria-label="Current annual bill compared with estimated savings and remaining bill"></canvas></article>
+                <article class="chart-card"><div><span>Before vs after</span><h4>Annual energy cost</h4></div><canvas id="costChart" aria-label="Annual energy cost comparison"></canvas></article>
+                <article class="chart-card"><div><span>Long-term outlook</span><h4>Cumulative net benefit</h4></div><canvas id="savingsChart" aria-label="25-year cumulative net benefit"></canvas></article>
+                <article class="chart-card chart-wide"><div><span>How energy is supplied</span><h4>Solar, battery and grid</h4></div><canvas id="energyChart" aria-label="Energy supply mix"></canvas></article>
+                <article class="chart-card chart-wide"><div><span>A typical day</span><h4>Battery usage profile</h4></div><canvas id="batteryChart" aria-label="Typical battery usage profile"></canvas></article>
+              </div>
+
+              <section class="incentive-section" aria-labelledby="incentiveHeading">
+                <div class="block-heading"><div><span>Government support</span><h4 id="incentiveHeading">Incentives identified for your postcode</h4></div><p>Federal certificate estimates are modelled. State programs remain subject to eligibility and available allocations.</p></div>
+                <div class="incentive-summary"><div><span>Modelled federal discount</span><strong id="modelledIncentives">—</strong><small>Already deducted from the system estimate</small></div><div><span>Estimated system investment</span><strong id="netSystemCost">—</strong><small id="investmentRange">Indicative installed range</small></div></div>
+                <div class="incentive-grid" id="incentiveGrid"></div>
+              </section>
+
+              <section class="finance-section" aria-labelledby="financeHeading">
+                <div class="block-heading"><div><span>Possible finance</span><h4 id="financeHeading">Lowest-cost pathway identified</h4></div><p>Indicative only. Approval, rates, fees, accredited-installer requirements and final provider terms apply.</p></div>
+                <div class="finance-card"><div class="finance-brand" id="financeBrand">—</div><div class="finance-primary"><span id="financePathLabel">Possible lowest option</span><strong id="financeMonthly">—</strong><small id="financeTerm">—</small></div><div class="finance-cashflow"><span>Year-one monthly saving</span><strong id="monthlySaving">—</strong><small id="financeDifference">—</small></div></div>
+                <p class="finance-disclaimer" id="financeDisclaimer">Finance estimates are general information and not financial advice.</p>
+              </section>
+
+              <div class="results-notes"><strong>Planning estimate, not a quote.</strong><p>Returns use current bill inputs, postcode-based solar yield, 0.5% annual panel degradation, 90% battery efficiency and a 2.5% default electricity-price rise. Federal STCs are estimated; conditional state incentives and finance costs are shown separately.</p></div>
+              <div class="wizard-actions"><button class="button button-quiet" type="button" id="printSummary">Print summary</button><button class="button button-primary" type="button" data-next="5">Get my PDF report <span>→</span></button></div>
+            </section>
+
+            <section class="wizard-step report-step" data-step="5">
+              <p class="step-label">Your personalised report</p>
+              <h3>Where should we send your results?</h3>
+              <p class="step-intro">Enter your details to download the report. You can also request a telephone appointment with Mark.</p>
+              <div id="leadFormFields">
+                <div class="field-grid">
+                  <label class="field"><span>Name</span><input id="leadName" autocomplete="name" required placeholder="Your name"></label>
+                  <label class="field"><span>Mobile</span><input id="leadPhone" type="tel" autocomplete="tel" required placeholder="04xx xxx xxx"></label>
+                  <label class="field field-full"><span>Email</span><input id="leadEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+                </div>
+                <label class="booking-toggle"><input id="bookCall" type="checkbox"><span><strong>Request a 30-minute telephone conversation</strong><small>Select a preferred weekday and time. Mark will confirm the appointment.</small></span></label>
+                <div class="booking-fields hidden" id="bookingFields">
+                  <div class="booking-heading"><span class="calendar-icon" aria-hidden="true">▦</span><div><strong>Choose your preferred time</strong><small>Times shown in Melbourne/Sydney time.</small></div></div>
+                  <div class="field-grid">
+                    <label class="field"><span>Preferred date</span><input id="appointmentDate" type="date"></label>
+                    <label class="field"><span>Preferred time</span><select id="appointmentTime"><option value="">Select a time</option><option>08:30</option><option>09:00</option><option>09:30</option><option>10:00</option><option>10:30</option><option>11:00</option><option>11:30</option><option>12:00</option><option>12:30</option><option>13:00</option><option>13:30</option><option>14:00</option><option>14:30</option><option>15:00</option><option>15:30</option><option>16:00</option><option>16:30</option><option>17:00</option></select></label>
+                  </div>
+                  <label class="bill-upload"><input id="billFile" type="file" accept="application/pdf,image/jpeg,image/png"><span class="upload-icon" aria-hidden="true">↑</span><span><strong>Upload a recent energy bill <em>Optional</em></strong><small>PDF, JPG or PNG · maximum 10 MB</small></span></label>
+                  <p class="bill-why"><strong>Why we use this:</strong> a recent bill shows your actual tariff, usage and seasonal pattern, helping Mark prepare a more accurate recommendation before your call.</p>
+                  <p class="booking-note">Saving the request opens a Google Calendar event with Mark invited. The time is subject to confirmation.</p>
+                </div>
+                <label class="consent"><input id="consent" type="checkbox" required><span>I agree that Mark Fitzpatrick may contact me about this assessment and requested appointment. My details will be used only for this enquiry. <a href="privacy.html" target="_blank" rel="noopener">Privacy notice</a>.</span></label>
+                <p class="form-error" id="leadError" role="alert"></p>
+                <div class="wizard-actions"><button class="button button-quiet" type="button" data-back="4">Back</button><button class="button button-primary" id="submitLead" type="button">Download my report <span>↓</span></button></div>
+              </div>
+              <div class="success-panel hidden" id="successPanel" tabindex="-1">
+                <span class="success-mark">✓</span><h4>Your report is ready.</h4><p id="successMessage">Thanks. Your details have been received.</p>
+                <div class="success-actions"><a class="button button-primary" id="downloadAgain" href="#" download>Download report</a><a class="button button-calendar hidden" id="calendarLink" target="_blank" rel="noopener">Open Google Calendar</a></div>
+                <button class="text-link restart-link" id="restartCalculator" type="button">Start a new assessment</button>
+              </div>
+            </section>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="strategy-section" id="how-it-works">
+      <div class="section-heading light"><div><p class="eyebrow">Beyond the numbers</p><h2>A practical plan, not just a calculator.</h2></div><p>The estimate helps start the conversation. A proper design uses your real load data and site conditions.</p></div>
+      <div class="strategy-grid">
+        <article><span>01</span><h3>Why this system</h3><p>The recommendation balances annual use, daytime demand, export value and your main energy goal.</p></article>
+        <article><span>02</span><h3>How it works</h3><p>Solar supplies daytime loads first. A battery stores suitable excess energy for later use.</p></article>
+        <article><span>03</span><h3>Installation journey</h3><p>Review bills, confirm the site, design the system, obtain approvals, install and support.</p></article>
+        <article><span>04</span><h3>Long-term strategy</h3><p>Plan for future loads such as EVs, electrification, new equipment and changing tariffs.</p></article>
+      </div>
+    </section>
+
+    <section class="advisor-section" id="contact">
+      <div class="advisor-photo-wrap"><div class="advisor-sun"></div><img src="mark-photo.jpg" alt="Mark Fitzpatrick, Renewable Energy Specialist"></div>
+      <div class="advisor-copy"><p class="eyebrow">Your renewable energy specialist</p><h2>Clear advice. Practical design. Measurable returns.</h2><p>I help homeowners, businesses, community groups and sporting clubs understand their energy use and make smarter solar and battery decisions.</p><div class="advisor-name"><strong>Mark Fitzpatrick</strong><span>Renewable Energy Specialist</span></div><div class="hero-actions"><a class="button button-primary" href="tel:0434151237">Call 0434 151 237</a><a class="text-link" href="mailto:mark.fitzpatrick@classaenergy.com.au">Send an email</a></div></div>
+    </section>
+  </main>
+
+  <footer><div class="brand footer-brand"><span class="brand-mark" aria-hidden="true"><span></span></span><span><strong>Solar Savings</strong><small>with Mark Fitzpatrick</small></span></div><div><a href="tel:0434151237">0434 151 237</a><a href="mailto:mark.fitzpatrick@classaenergy.com.au">mark.fitzpatrick@classaenergy.com.au</a></div><p>Estimates are general information only and are not financial advice, an engineering design or a formal quotation. © <span id="year"></span> Mark Fitzpatrick.</p></footer>
 </body>
-
 </html>
